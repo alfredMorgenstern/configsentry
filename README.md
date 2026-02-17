@@ -27,6 +27,28 @@ node dist/cli.js ./docker-compose.yml
 node dist/cli.js ./docker-compose.yml --json
 ```
 
+## Use in GitHub Actions (copy/paste)
+
+```yml
+name: Compose lint
+on: [push, pull_request]
+
+jobs:
+  configsentry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+      - run: npm run build
+      - run: node dist/cli.js ./docker-compose.yml
+```
+
+> Later sprint: publish to npm + provide a one-step GitHub Action wrapper.
+
 ## Exit codes
 - `0` no findings
 - `2` findings present
