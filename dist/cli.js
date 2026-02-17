@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+import path from 'node:path';
+import process from 'node:process';
+import { loadCompose } from './compose.js';
+import { runRules } from './rules.js';
+function usage() {
+    console.log(`ConfigSentry (MVP)\n\nUsage:\n  configsentry <path-to-docker-compose.yml> [--json]\n\nExit codes:\n  0 = no findings\n  2 = findings present\n  1 = error\n`);
+}
+async function main() {
+    const args = process.argv.slice(2);
+    if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
+        usage();
+        process.exit(0);
+    }
+    const json = args.includes('--json');
+    const target = args.find((a) => !a.startsWith('-'));
+    if (!target) {
+        usage();
+        process.exit(1);
+    }
+    const targetPath = path.resolve(target);
+    const { compose } = await loadCompose(targetPath);
+    const findings = runRules(compose, targetPath);
+    if (json) {
+        console.log(JSON.stringify({ targetPath, findings }, null, 2));
+    }
+    else {
+        if (findings.length === 0) {
+            console.log(`✅ No findings for ${targetPath}`);
+        }
+        else {
+            console.log(`❌ ${findings.length} finding(s) for ${targetPath}\n`);
+            for (const f of findings) {
+                console.log(`[${f.severity.toUpperCase()}] ${f.title}`);
+                console.log(`- service: ${f.service ?? '-'}
+- rule: ${f.id}
+- where: ${f.path ?? '-'}
+- msg: ${f.message}`);
+                if (f.suggestion)
+                    console.log(`- fix: ${f.suggestion}`);
+                console.log('');
+            }
+        }
+    }
+    process.exit(findings.length === 0 ? 0 : 2);
+}
+main().catch((err) => {
+    console.error('Error:', err);
+    process.exit(1);
+});
