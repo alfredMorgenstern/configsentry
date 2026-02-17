@@ -27,6 +27,12 @@ node dist/cli.js ./docker-compose.yml
 node dist/cli.js ./docker-compose.yml --json
 ```
 
+### SARIF output (GitHub Code Scanning)
+
+```bash
+node dist/cli.js ./docker-compose.yml --sarif > configsentry.sarif.json
+```
+
 ## Use in GitHub Actions (copy/paste)
 
 ```yml

@@ -3,9 +3,10 @@ import path from 'node:path';
 import process from 'node:process';
 import { loadCompose } from './compose.js';
 import { runRules } from './rules.js';
+import { findingsToSarif } from './sarif.js';
 
 function usage() {
-  console.log(`ConfigSentry (MVP)\n\nUsage:\n  configsentry <path-to-docker-compose.yml> [--json]\n\nExit codes:\n  0 = no findings\n  2 = findings present\n  1 = error\n`);
+  console.log(`ConfigSentry (MVP)\n\nUsage:\n  configsentry <path-to-docker-compose.yml> [--json] [--sarif]\n\nOutput:\n  --json   machine-readable findings\n  --sarif  SARIF 2.1.0 (for GitHub code scanning)\n\nExit codes:\n  0 = no findings\n  2 = findings present\n  1 = error\n`);
 }
 
 async function main() {
@@ -16,6 +17,12 @@ async function main() {
   }
 
   const json = args.includes('--json');
+  const sarif = args.includes('--sarif');
+  if (json && sarif) {
+    console.error('Error: choose only one output mode: --json or --sarif');
+    process.exit(1);
+  }
+
   const target = args.find((a) => !a.startsWith('-'));
   if (!target) {
     usage();
@@ -28,6 +35,8 @@ async function main() {
 
   if (json) {
     console.log(JSON.stringify({ targetPath, findings }, null, 2));
+  } else if (sarif) {
+    console.log(JSON.stringify(findingsToSarif(findings), null, 2));
   } else {
     if (findings.length === 0) {
       console.log(`✅ No findings for ${targetPath}`);
