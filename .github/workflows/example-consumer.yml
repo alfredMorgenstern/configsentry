@@ -13,8 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Use the action from this repo (pin to a tag once we create releases)
-      - uses: alfredMorgenstern/configsentry@master
+      # Use the action from this repo (pin to a tag)
+      - uses: alfredMorgenstern/configsentry@v0.0.1
         with:
           compose-file: docker-compose.yml
           sarif: true
+          upload-sarif: false
