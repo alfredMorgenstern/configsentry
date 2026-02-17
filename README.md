@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: alfredMorgenstern/configsentry@v0.0.4
+      - uses: alfredMorgenstern/configsentry@v0.0.7
         with:
           compose-file: docker-compose.yml
           sarif: true
