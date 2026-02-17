@@ -15,6 +15,14 @@ Designed to be **CI-friendly** (non-zero exit code when findings exist).
 
 ## Quickstart
 
+### Run via npx (after npm publish)
+
+```bash
+npx configsentry ./docker-compose.yml
+```
+
+### Run from source
+
 ```bash
 npm install
 npm run build
@@ -77,7 +85,7 @@ jobs:
           upload-sarif: false
 ```
 
-> Tip: pin to a tag (like `v0.0.1`) for reproducible builds.
+> Tip: pin to a tag (like `v0.0.8`) for reproducible builds.
 
 ## Exit codes
 - `0` no findings

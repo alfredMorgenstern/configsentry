@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import process from 'node:process';
+import fs from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { loadCompose } from './compose.js';
 import { runRules } from './rules.js';
 import { findingsToSarif } from './sarif.js';
@@ -11,6 +13,20 @@ function usage() {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  if (args.includes('-v') || args.includes('--version')) {
+    try {
+      const here = path.dirname(fileURLToPath(import.meta.url));
+      const pkgPath = path.resolve(here, '../package.json');
+      const raw = await fs.readFile(pkgPath, 'utf8');
+      const pkg = JSON.parse(raw);
+      console.log(pkg.version || 'unknown');
+    } catch {
+      console.log('unknown');
+    }
+    process.exit(0);
+  }
+
   if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
     usage();
     process.exit(0);
