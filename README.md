@@ -35,6 +35,8 @@ node dist/cli.js ./docker-compose.yml --sarif > configsentry.sarif.json
 
 ## Use in GitHub Actions (copy/paste)
 
+### Option A: run from source
+
 ```yml
 name: Compose lint
 on: [push, pull_request]
@@ -53,7 +55,29 @@ jobs:
       - run: node dist/cli.js ./docker-compose.yml
 ```
 
-> Later sprint: publish to npm + provide a one-step GitHub Action wrapper.
+### Option B: use the ConfigSentry composite action
+
+```yml
+name: Compose lint
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  security-events: write   # only needed if upload-sarif=true
+
+jobs:
+  configsentry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: alfredMorgenstern/configsentry@master
+        with:
+          compose-file: docker-compose.yml
+          sarif: true
+          upload-sarif: false
+```
+
+> Later sprint: publish to npm + pin the action to a tagged release (v0.x).
 
 ## Exit codes
 - `0` no findings

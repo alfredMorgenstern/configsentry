@@ -16,9 +16,19 @@
   "bin": {
     "configsentry": "dist/cli.js"
   },
+  "files": [
+    "dist/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "test": "node --test dist/**/*.test.js",
     "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build",
     "start": "node dist/cli.js",
     "dev": "node --loader ts-node/esm src/cli.ts",
     "lint:example": "node dist/cli.js ./example.docker-compose.yml"

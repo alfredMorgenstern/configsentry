@@ -11,9 +11,13 @@ inputs:
     required: false
     default: "docker-compose.yml"
   sarif:
-    description: "If true, generate SARIF and upload as artifact"
+    description: "If true, generate SARIF"
     required: false
     default: "true"
+  upload-sarif:
+    description: "If true, upload SARIF to GitHub Code Scanning (requires permissions: security-events: write)"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -49,3 +53,9 @@ runs:
       with:
         name: configsentry-sarif
         path: configsentry.sarif.json
+
+    - name: Upload SARIF to GitHub Code Scanning
+      if: ${{ inputs.sarif == 'true' && inputs.upload-sarif == 'true' }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: configsentry.sarif.json
