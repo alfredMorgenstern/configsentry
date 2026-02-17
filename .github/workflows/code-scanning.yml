@@ -1,0 +1,21 @@
+name: ConfigSentry Code Scanning
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  configsentry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: alfredMorgenstern/configsentry@v0.0.1
+        with:
+          compose-file: docker-compose.yml
+          sarif: true
+          upload-sarif: true
