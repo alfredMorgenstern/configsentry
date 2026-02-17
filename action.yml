@@ -1,0 +1,51 @@
+name: "ConfigSentry"
+description: "Lint docker-compose.yml for high-impact security + ops footguns"
+author: "Marius Morgenstern"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  compose-file:
+    description: "Path to docker-compose.yml"
+    required: false
+    default: "docker-compose.yml"
+  sarif:
+    description: "If true, generate SARIF and upload as artifact"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+
+    - name: Install
+      shell: bash
+      run: npm ci
+
+    - name: Build
+      shell: bash
+      run: npm run build
+
+    - name: Run ConfigSentry
+      shell: bash
+      run: |
+        set -euo pipefail
+        FILE="${{ inputs.compose-file }}"
+        if [[ "${{ inputs.sarif }}" == "true" ]]; then
+          node dist/cli.js "$FILE" --sarif > configsentry.sarif.json || true
+          node dist/cli.js "$FILE" || true
+        else
+          node dist/cli.js "$FILE"
+        fi
+
+    - name: Upload SARIF artifact
+      if: ${{ inputs.sarif == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: configsentry-sarif
+        path: configsentry.sarif.json
