@@ -18,6 +18,10 @@ inputs:
     description: "If true, upload SARIF to GitHub Code Scanning (requires permissions: security-events: write)"
     required: false
     default: "false"
+  fail-on-findings:
+    description: "If true, fail the action when findings exist (recommended for CI gating)."
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -40,11 +44,17 @@ runs:
       run: |
         set -euo pipefail
         FILE="${{ inputs.compose-file }}"
+
         if [[ "${{ inputs.sarif }}" == "true" ]]; then
+          # Always generate SARIF when requested.
           node dist/cli.js "$FILE" --sarif > configsentry.sarif.json || true
-          node dist/cli.js "$FILE" || true
-        else
+        fi
+
+        # Control whether findings should fail the job.
+        if [[ "${{ inputs.fail-on-findings }}" == "true" ]]; then
           node dist/cli.js "$FILE"
+        else
+          node dist/cli.js "$FILE" || true
         fi
 
     - name: Upload SARIF artifact
@@ -56,6 +66,6 @@ runs:
 
     - name: Upload SARIF to GitHub Code Scanning
       if: ${{ inputs.sarif == 'true' && inputs.upload-sarif == 'true' }}
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: configsentry.sarif.json
