@@ -1,11 +1,13 @@
 # Example: how a different repo would use ConfigSentry as an action.
 # Copy into your own project and adjust the compose file path.
 
-name: Compose lint (ConfigSentry)
+name: Compose lint (ConfigSentry) — example workflow
+
+# This file is an EXAMPLE for other repos.
+# It is intentionally NOT run on every push in this repo to avoid noisy notifications.
 
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   configsentry:
