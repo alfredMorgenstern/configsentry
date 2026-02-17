@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ConfigSentry — docker-compose guardrails</title>
+  <meta name="description" content="ConfigSentry flags high-impact docker-compose.yml security and ops footguns: privileged containers, docker socket mounts, exposed ports, missing healthchecks, and more." />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div class="brand">ConfigSentry</div>
+      <nav class="nav">
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+        <a href="#install">Install</a>
+        <a href="#rules">Rules</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+    </div>
+
+    <h1>Guardrails for <code>docker-compose.yml</code>.</h1>
+    <p class="lead">A tiny CLI linter that catches security + reliability footguns before they hit prod.</p>
+
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/alfredMorgenstern/configsentry">View on GitHub</a>
+      <a class="btn" href="#install">Run it in 60 seconds</a>
+    </div>
+
+    <div class="badges">
+      <span class="badge">CI-friendly exit codes</span>
+      <span class="badge">Actionable fixes</span>
+      <span class="badge">MIT licensed</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Why</h2>
+      <p>
+        Compose files grow organically. A single line like <code>privileged: true</code> or mounting
+        <code>/var/run/docker.sock</code> can silently turn a container into “root on host”. ConfigSentry
+        surfaces the riskiest patterns early — locally or in CI.
+      </p>
+    </section>
+
+    <section id="install">
+      <h2>Install & run</h2>
+      <pre><code>git clone https://github.com/alfredMorgenstern/configsentry
+cd configsentry
+npm ci
+npm run build
+node dist/cli.js ./docker-compose.yml</code></pre>
+      <p class="hint">Tip: use the exit code (<code>0</code>=clean, <code>2</code>=findings) to fail pipelines.</p>
+    </section>
+
+    <section id="rules">
+      <h2>What it checks (MVP)</h2>
+      <ul class="grid">
+        <li><strong>Privileged containers</strong><br/>Flags <code>privileged: true</code>.</li>
+        <li><strong>Docker socket mounts</strong><br/>Flags mounting <code>/var/run/docker.sock</code>.</li>
+        <li><strong>Sensitive ports exposed</strong><br/>Flags <code>5432:5432</code> / public binds for common ports.</li>
+        <li><strong>Missing restart policy</strong><br/>Recommends <code>restart: unless-stopped</code> (or similar).</li>
+        <li><strong>Missing healthcheck</strong><br/>Encourages healthchecks for reliable orchestration.</li>
+        <li><strong>Likely running as root</strong><br/>Warns when <code>user:</code> is missing.</li>
+      </ul>
+    </section>
+
+    <section id="roadmap">
+      <h2>Roadmap</h2>
+      <ol>
+        <li>Publish to npm (<code>configsentry</code>)</li>
+        <li>GitHub Action wrapper (fail PRs with annotated findings)</li>
+        <li>SARIF output for GitHub “Code scanning”</li>
+        <li>Baselines/suppressions for incremental adoption</li>
+        <li>Autofix mode for safe transforms</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Pricing (later)</h2>
+      <p>
+        The core linter stays open source. If there’s demand, a Pro tier can add PR comments, SARIF,
+        baselines, and policy packs for common stacks.
+      </p>
+    </section>
+
+    <footer class="footer">
+      <p>
+        Built by Marius / Alfred. <a href="https://github.com/alfredMorgenstern/configsentry">GitHub repo</a>.
+      </p>
+    </footer>
+  </main>
+</body>
+</html>

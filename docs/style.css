@@ -1,0 +1,47 @@
+:root{
+  --bg:#0b1220;
+  --panel:#101a2f;
+  --text:#e8eefc;
+  --muted:#b6c2e2;
+  --accent:#6aa7ff;
+  --accent2:#7ef0c2;
+  --border:rgba(255,255,255,.12);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+  background:radial-gradient(1200px 600px at 20% 0%, rgba(106,167,255,.18), transparent 50%),
+             radial-gradient(1000px 600px at 90% 10%, rgba(126,240,194,.12), transparent 55%),
+             var(--bg);
+  color:var(--text);
+}
+.wrap{max-width:980px;margin:0 auto;padding:28px 22px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:800;letter-spacing:.2px}
+.nav a{color:var(--muted);text-decoration:none;margin-left:14px}
+.nav a:hover{color:var(--text)}
+header h1{font-size:44px;line-height:1.1;margin:26px 0 10px}
+.lead{font-size:18px;color:var(--muted);max-width:70ch}
+code{background:rgba(255,255,255,.08);padding:.12em .35em;border-radius:6px}
+pre{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;overflow:auto}
+.cta{display:flex;gap:12px;margin:18px 0 10px;flex-wrap:wrap}
+.btn{display:inline-block;border:1px solid var(--border);padding:10px 14px;border-radius:10px;color:var(--text);text-decoration:none;background:rgba(255,255,255,.04)}
+.btn:hover{border-color:rgba(255,255,255,.25)}
+.btn.primary{background:linear-gradient(90deg, rgba(106,167,255,.9), rgba(126,240,194,.85));color:#04101f;border-color:transparent;font-weight:700}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.badge{border:1px solid var(--border);color:var(--muted);padding:6px 10px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.03)}
+section{margin:26px 0}
+section h2{margin:0 0 10px;font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0;list-style:none}
+.grid li{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--muted)}
+.grid strong{color:var(--text)}
+.hint{color:var(--muted)}
+.footer{border-top:1px solid var(--border);margin-top:34px;padding-top:14px;color:var(--muted)}
+.footer a{color:var(--muted)}
+.footer a:hover{color:var(--text)}
+@media (max-width: 860px){
+  header h1{font-size:36px}
+  .grid{grid-template-columns:1fr}
+  .nav{display:none}
+}
