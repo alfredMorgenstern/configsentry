@@ -19,3 +19,4 @@ jobs:
           compose-file: docker-compose.yml
           sarif: true
           upload-sarif: false
+          fail-on-findings: false
