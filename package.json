@@ -43,6 +43,9 @@
     "yaml"
   ],
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "yaml": "^2.8.2",
     "zod": "^4.3.6"

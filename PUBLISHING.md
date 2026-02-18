@@ -7,22 +7,32 @@ This repo is intentionally **not published to npm yet**.
 - logged in locally: `npm login`
 
 ## Steps
+0) Confirm package name availability (optional):
+   ```bash
+   npm view configsentry version
+   ```
 1) Ensure tests pass:
    ```bash
    npm ci
    npm run build
    npm test
    ```
-2) Make package publishable (currently private):
+2) Login:
+   ```bash
+   npm login
+   npm whoami
+   ```
+3) Make package publishable (currently private):
    - set `"private": false` in `package.json`
-3) Dry run:
+4) Dry run:
    ```bash
    npm pack
    ```
-4) Publish:
+5) Publish:
    ```bash
-   npm publish --access public
+   npm publish
    ```
+   (publishConfig sets access=public)
 
 ## Notes
 - The CLI entrypoint is `dist/cli.js` and is exposed as `configsentry` via `bin`.
