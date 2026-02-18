@@ -1,8 +1,6 @@
 name: ConfigSentry Code Scanning
-
 on:
   push:
-    branches: [master]
   pull_request:
 
 permissions:
@@ -15,9 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: alfredMorgenstern/configsentry@v0.0.8
+      # Run the composite action from this repo and upload SARIF to Code Scanning.
+      - uses: ./. 
         with:
-          compose-file: docker-compose.yml
+          target: ./example.docker-compose.yml
           sarif: true
           upload-sarif: true
           fail-on-findings: false
