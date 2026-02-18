@@ -1,16 +1,16 @@
 name: CI
-
 on:
   push:
-    branches: [master]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -20,18 +20,20 @@ jobs:
       - run: npm run build
       - run: npm test
 
-  demo-run:
+  action-example:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      # Runs the composite action from this repo (path) against the example file.
+      - uses: ./. 
         with:
-          node-version: 22
-          cache: npm
+          target: ./example.docker-compose.yml
+          sarif: true
+          upload-sarif: false
+          fail-on-findings: false
 
-      - run: npm ci
-      - run: npm run build
-      - name: Lint example compose (expected findings)
-        run: |
-          node dist/cli.js ./example.docker-compose.yml || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: configsentry-sarif-example
+          path: configsentry.sarif.json

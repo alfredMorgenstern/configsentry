@@ -1,6 +1,6 @@
-# Publishing (when ready)
+# Publishing
 
-This repo is intentionally **not published to npm yet**.
+This repo is prepared for npm publishing; the remaining work is authentication + `npm publish`.
 
 ## Prereqs
 - npm account that owns the package name `configsentry`
@@ -22,8 +22,8 @@ This repo is intentionally **not published to npm yet**.
    npm login
    npm whoami
    ```
-3) Make package publishable (currently private):
-   - set `"private": false` in `package.json`
+3) Ensure package is publishable:
+   - `package.json` must have `"private": false`
 4) Dry run:
    ```bash
    npm pack
