@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: alfredMorgenstern/configsentry@v0.0.9
+      - uses: alfredMorgenstern/configsentry@v0.0.13
         with:
           target: .
           # optional: baseline: .configsentry-baseline.json
