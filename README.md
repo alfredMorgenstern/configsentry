@@ -85,19 +85,23 @@ on: [push, pull_request]
 
 permissions:
   contents: read
-  security-events: write   # only needed if upload-sarif=true
+  security-events: write   # required if upload-sarif=true (Code Scanning)
 
 jobs:
   configsentry:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: alfredMorgenstern/configsentry@v0.0.8
+      - uses: alfredMorgenstern/configsentry@v0.0.9
         with:
           target: .
           # optional: baseline: .configsentry-baseline.json
           sarif: true
           upload-sarif: false
+
+      # If you set upload-sarif: true, also ensure the workflow has:
+      # permissions:
+      #   security-events: write
 ```
 
 > Tip: pin to a tag (like `v0.0.8`) for reproducible builds.

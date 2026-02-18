@@ -1,6 +1,6 @@
 {
   "name": "configsentry",
-  "version": "0.1.0",
+  "version": "0.0.9",
   "description": "Developer-first guardrails for docker-compose.yml (security + ops footguns).",
   "type": "module",
   "license": "MIT",
@@ -42,7 +42,7 @@
     "lint",
     "yaml"
   ],
-  "private": true,
+  "private": false,
   "publishConfig": {
     "access": "public"
   },

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.9
+- Packaging: make npm publish possible (no longer `private`)
+- Docs: composite action example + Code Scanning SARIF permission note
+
 ## v0.0.1
 - Initial MVP
 - CLI output (human + JSON)
