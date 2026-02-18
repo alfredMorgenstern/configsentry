@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.11
+- Docs: add npm version badge + make npx quickstart primary
+
 ## v0.0.10
 - Packaging: `npm pkg fix` cleanup (repository.url normalization)
 

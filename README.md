@@ -1,5 +1,7 @@
 # ConfigSentry (MVP)
 
+[![npm version](https://img.shields.io/npm/v/configsentry.svg)](https://www.npmjs.com/package/configsentry)
+
 Developer-first guardrails for **docker-compose.yml** (security + ops footguns).
 
 ## What it does
@@ -15,7 +17,7 @@ Designed to be **CI-friendly** (non-zero exit code when findings exist).
 
 ## Quickstart
 
-### Run via npx (after npm publish)
+### Run via npx
 
 ```bash
 npx configsentry ./docker-compose.yml
