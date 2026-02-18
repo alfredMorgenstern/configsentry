@@ -6,9 +6,14 @@ import { fileURLToPath } from 'node:url';
 import { loadCompose } from './compose.js';
 import { runRules } from './rules.js';
 import { findingsToSarif } from './sarif.js';
+import { resolveTargets } from './scan.js';
+import { applyBaseline, loadBaseline, writeBaseline } from './baseline.js';
 
 function usage() {
-  console.log(`ConfigSentry (MVP)\n\nUsage:\n  configsentry <path-to-docker-compose.yml> [--json] [--sarif]\n\nOutput:\n  --json   machine-readable findings\n  --sarif  SARIF 2.1.0 (for GitHub code scanning)\n\nExit codes:\n  0 = no findings\n  2 = findings present\n  1 = error\n`);
+  console.log(`ConfigSentry (MVP)\n\nUsage:\n  configsentry <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]\n\nOutput:\n  --json           machine-readable findings\n  --sarif          SARIF 2.1.0 (for GitHub code scanning)\n\nBaselines:\n  --baseline <file>        suppress findings present in a baseline file\n  --write-baseline <file>  write baseline file for current findings and exit 0\n\nExit codes:\n  0 = no findings (after baseline suppression)
+  2 = findings present
+  1 = error
+`);
 }
 
 async function main() {
@@ -39,25 +44,64 @@ async function main() {
     process.exit(1);
   }
 
+  const baselineIdx = args.indexOf('--baseline');
+  const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
+  const writeBaselineIdx = args.indexOf('--write-baseline');
+  const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
+
   const target = args.find((a) => !a.startsWith('-'));
   if (!target) {
     usage();
     process.exit(1);
   }
 
-  const targetPath = path.resolve(target);
-  const { compose } = await loadCompose(targetPath);
-  const findings = runRules(compose, targetPath);
+  const targetPaths = await resolveTargets(target);
+  if (targetPaths.length === 0) {
+    console.error(`No compose files found in: ${target}`);
+    process.exit(1);
+  }
+
+  let allFindings = [] as any[];
+  for (const targetPath of targetPaths) {
+    const { compose } = await loadCompose(targetPath);
+    allFindings = allFindings.concat(runRules(compose, targetPath));
+  }
+
+  // Baseline suppression
+  let suppressed: any[] = [];
+  let findings = allFindings;
+  if (baselinePath) {
+    const set = await loadBaseline(path.resolve(baselinePath));
+    const res = applyBaseline(allFindings, set);
+    findings = res.kept;
+    suppressed = res.suppressed;
+  }
+
+  // Baseline generation mode
+  if (writeBaselinePath) {
+    await writeBaseline(path.resolve(writeBaselinePath), allFindings);
+    console.log(`Wrote baseline: ${path.resolve(writeBaselinePath)} (${allFindings.length} finding(s))`);
+    process.exit(0);
+  }
 
   if (json) {
-    console.log(JSON.stringify({ targetPath, findings }, null, 2));
+    console.log(JSON.stringify({ targetPaths, findings, suppressedCount: suppressed.length }, null, 2));
   } else if (sarif) {
     console.log(JSON.stringify(findingsToSarif(findings), null, 2));
   } else {
+    const scope = targetPaths.length === 1 ? targetPaths[0] : `${targetPaths.length} file(s)`;
+
     if (findings.length === 0) {
-      console.log(`✅ No findings for ${targetPath}`);
+      console.log(`✅ No findings for ${scope}`);
+      if (suppressed.length > 0) {
+        console.log(`(suppressed by baseline: ${suppressed.length})`);
+      }
     } else {
-      console.log(`❌ ${findings.length} finding(s) for ${targetPath}\n`);
+      console.log(`❌ ${findings.length} finding(s) for ${scope}`);
+      if (suppressed.length > 0) {
+        console.log(`(suppressed by baseline: ${suppressed.length})`);
+      }
+      console.log('');
       for (const f of findings) {
         console.log(`[${f.severity.toUpperCase()}] ${f.title}`);
         console.log(`- service: ${f.service ?? '-'}

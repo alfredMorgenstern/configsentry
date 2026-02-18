@@ -41,6 +41,20 @@ node dist/cli.js ./docker-compose.yml --json
 node dist/cli.js ./docker-compose.yml --sarif > configsentry.sarif.json
 ```
 
+## Baselines (incremental adoption)
+
+Generate a baseline (captures current findings):
+
+```bash
+node dist/cli.js ./docker-compose.yml --write-baseline .configsentry-baseline.json
+```
+
+Then suppress baseline findings in CI:
+
+```bash
+node dist/cli.js ./docker-compose.yml --baseline .configsentry-baseline.json
+```
+
 ## Use in GitHub Actions (copy/paste)
 
 ### Option A: run from source
