@@ -42,6 +42,8 @@ runs:
       with:
         node-version: 22
         cache: npm
+        # Use repo-root lockfile for cache keying.
+        cache-dependency-path: package-lock.json
 
     - name: Install
       shell: bash
