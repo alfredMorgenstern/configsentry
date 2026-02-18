@@ -49,3 +49,15 @@ test('detects unconfined security_opt', () => {
   const findings = runRules(compose, 'docker-compose.yml');
   assert.ok(findings.some((f) => f.id === 'compose.security-unconfined' && f.service === 'app'));
 });
+
+test('detects host /dev mount', () => {
+  const compose = { services: { app: { volumes: ['/dev:/dev'] } } };
+  const findings = runRules(compose, 'docker-compose.yml');
+  assert.ok(findings.some((f) => f.id === 'compose.host-dev-mount' && f.service === 'app'));
+});
+
+test('detects dangerous device mapping', () => {
+  const compose = { services: { app: { devices: ['/dev/kmsg:/dev/kmsg'] } } };
+  const findings = runRules(compose, 'docker-compose.yml');
+  assert.ok(findings.some((f) => f.id === 'compose.dangerous-device' && f.service === 'app'));
+});

@@ -137,6 +137,35 @@ export function runRules(compose, targetPath) {
                     suggestion: 'Avoid mounting /. Mount only specific directories required by the app.'
                 });
             }
+            if (v.startsWith('/dev:/dev') || v.startsWith('/dev/:/dev')) {
+                findings.push({
+                    id: 'compose.host-dev-mount',
+                    title: 'Host /dev mounted into container',
+                    severity: 'high',
+                    message: `Service '${serviceName}' mounts host /dev into the container ('${v}'), which can enable device access and privilege escalation.`,
+                    service: serviceName,
+                    path: `${targetPath}#services.${serviceName}.volumes`,
+                    suggestion: 'Avoid mounting /dev. If hardware access is required, map only the specific device(s) needed via devices:.'
+                });
+            }
+        }
+        // Rule: dangerous device mappings
+        const devices = Array.isArray(svc?.devices) ? svc.devices : [];
+        for (const d of devices) {
+            if (typeof d !== 'string')
+                continue;
+            const lower = d.toLowerCase();
+            if (lower.includes('/dev/mem') || lower.includes('/dev/kmem') || lower.includes('/dev/kmsg')) {
+                findings.push({
+                    id: 'compose.dangerous-device',
+                    title: 'Dangerous device mapped into container',
+                    severity: 'high',
+                    message: `Service '${serviceName}' maps a sensitive device into the container ('${d}').`,
+                    service: serviceName,
+                    path: `${targetPath}#services.${serviceName}.devices`,
+                    suggestion: 'Avoid mapping kernel/memory/log devices into containers. If absolutely required, isolate the host and restrict container privileges.'
+                });
+            }
         }
         // Rule: restart policy
         if (svc?.restart == null) {
