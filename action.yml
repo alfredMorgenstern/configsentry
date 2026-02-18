@@ -42,6 +42,8 @@ runs:
       with:
         node-version: 22
         cache: npm
+        # Composite actions run from their own directory; point the cache at this action's lockfile.
+        cache-dependency-path: ${{ github.action_path }}/package-lock.json
 
     - name: Install
       shell: bash
