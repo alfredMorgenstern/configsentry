@@ -48,6 +48,42 @@ export function runRules(compose, targetPath) {
                 suggestion: 'Remove privileged: true unless absolutely required; prefer adding only the needed capabilities.'
             });
         }
+        // Rule: cap_add: [ALL]
+        const capAdd = Array.isArray(svc?.cap_add) ? svc.cap_add : [];
+        if (capAdd.some((c) => String(c).toUpperCase() === 'ALL')) {
+            findings.push({
+                id: 'compose.cap-add-all',
+                title: 'Dangerous Linux capabilities (cap_add: ALL)',
+                severity: 'high',
+                message: `Service '${serviceName}' uses cap_add: [ALL], which is effectively privileged in many cases.`,
+                service: serviceName,
+                path: `${targetPath}#services.${serviceName}.cap_add`,
+                suggestion: 'Remove cap_add: ALL. Add only the specific capabilities required (e.g. NET_BIND_SERVICE) or redesign to avoid it.'
+            });
+        }
+        // Rule: host namespaces (network/pid)
+        if (svc?.network_mode === 'host') {
+            findings.push({
+                id: 'compose.network-host',
+                title: 'Host network namespace (network_mode: host)',
+                severity: 'high',
+                message: `Service '${serviceName}' uses network_mode: host, bypassing Docker network isolation.`,
+                service: serviceName,
+                path: `${targetPath}#services.${serviceName}.network_mode`,
+                suggestion: 'Avoid host networking. Prefer explicit port mappings or internal networks.'
+            });
+        }
+        if (svc?.pid === 'host') {
+            findings.push({
+                id: 'compose.pid-host',
+                title: 'Host PID namespace (pid: host)',
+                severity: 'high',
+                message: `Service '${serviceName}' uses pid: host, exposing host process namespace to the container.`,
+                service: serviceName,
+                path: `${targetPath}#services.${serviceName}.pid`,
+                suggestion: 'Avoid pid: host unless you are building low-level host tooling and understand the security implications.'
+            });
+        }
         // Rule: docker socket mount
         const volumes = Array.isArray(svc?.volumes) ? svc.volumes : [];
         for (const v of volumes) {

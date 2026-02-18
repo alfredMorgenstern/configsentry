@@ -16,3 +16,18 @@ test('detects docker socket mount', () => {
     const findings = runRules(compose, 'docker-compose.yml');
     assert.ok(findings.some((f) => f.id === 'compose.docker-socket' && f.service === 'runner'));
 });
+test('detects cap_add: ALL', () => {
+    const compose = { services: { app: { cap_add: ['ALL'] } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.cap-add-all' && f.service === 'app'));
+});
+test('detects network_mode: host', () => {
+    const compose = { services: { app: { network_mode: 'host' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.network-host' && f.service === 'app'));
+});
+test('detects pid: host', () => {
+    const compose = { services: { app: { pid: 'host' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.pid-host' && f.service === 'app'));
+});
