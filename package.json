@@ -1,13 +1,13 @@
 {
   "name": "configsentry",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Developer-first guardrails for docker-compose.yml (security + ops footguns).",
   "type": "module",
   "license": "MIT",
   "author": "Marius Morgenstern",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alfredMorgenstern/configsentry.git"
+    "url": "git+https://github.com/alfredMorgenstern/configsentry.git"
   },
   "homepage": "https://configsentry.morgenstern.work",
   "bugs": {

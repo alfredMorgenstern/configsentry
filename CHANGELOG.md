@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.10
+- Packaging: `npm pkg fix` cleanup (repository.url normalization)
+
 ## v0.0.9
 - Packaging: make npm publish possible (no longer `private`)
 - Docs: composite action example + Code Scanning SARIF permission note
