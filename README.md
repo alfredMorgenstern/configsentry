@@ -94,7 +94,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: alfredMorgenstern/configsentry@v0.0.8
         with:
-          compose-file: docker-compose.yml
+          target: .
+          # optional: baseline: .configsentry-baseline.json
           sarif: true
           upload-sarif: false
 ```

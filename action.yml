@@ -6,8 +6,12 @@ branding:
   color: "blue"
 
 inputs:
+  target:
+    description: "File or directory to scan (compose file or folder containing compose files)"
+    required: false
+    default: "."
   compose-file:
-    description: "Path to docker-compose.yml"
+    description: "Deprecated: use target instead"
     required: false
     default: "docker-compose.yml"
   sarif:
@@ -22,6 +26,14 @@ inputs:
     description: "If true, fail the action when findings exist (recommended for CI gating)."
     required: false
     default: "true"
+  baseline:
+    description: "Optional baseline file path (suppresses known findings)"
+    required: false
+    default: ""
+  write-baseline:
+    description: "Optional path to write a baseline file (does not fail)"
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -43,18 +55,33 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        FILE="${{ inputs.compose-file }}"
+        TARGET="${{ inputs.target }}"
+        # Back-compat: if target is unset/blank, fall back to compose-file.
+        if [[ -z "$TARGET" ]]; then TARGET="${{ inputs.compose-file }}"; fi
+
+        BASELINE="${{ inputs.baseline }}"
+        WRITE_BASELINE="${{ inputs.write-baseline }}"
+
+        FLAGS=()
+        if [[ -n "$BASELINE" ]]; then FLAGS+=("--baseline" "$BASELINE"); fi
+        if [[ -n "$WRITE_BASELINE" ]]; then FLAGS+=("--write-baseline" "$WRITE_BASELINE"); fi
 
         if [[ "${{ inputs.sarif }}" == "true" ]]; then
           # Always generate SARIF when requested.
-          node dist/cli.js "$FILE" --sarif > configsentry.sarif.json || true
+          node dist/cli.js "$TARGET" --sarif "${FLAGS[@]}" > configsentry.sarif.json || true
+        fi
+
+        # If we're writing a baseline, never fail.
+        if [[ -n "$WRITE_BASELINE" ]]; then
+          node dist/cli.js "$TARGET" "${FLAGS[@]}" || true
+          exit 0
         fi
 
         # Control whether findings should fail the job.
         if [[ "${{ inputs.fail-on-findings }}" == "true" ]]; then
-          node dist/cli.js "$FILE"
+          node dist/cli.js "$TARGET" "${FLAGS[@]}"
         else
-          node dist/cli.js "$FILE" || true
+          node dist/cli.js "$TARGET" "${FLAGS[@]}" || true
         fi
 
     - name: Upload SARIF artifact
