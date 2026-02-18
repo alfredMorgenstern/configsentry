@@ -64,7 +64,7 @@ export function runRules(compose: any, targetPath: string): Finding[] {
       });
     }
 
-    // Rule: host namespaces (network/pid)
+    // Rule: host namespaces (network/pid/ipc)
     if (svc?.network_mode === 'host') {
       findings.push({
         id: 'compose.network-host',
@@ -85,6 +85,33 @@ export function runRules(compose: any, targetPath: string): Finding[] {
         service: serviceName,
         path: `${targetPath}#services.${serviceName}.pid`,
         suggestion: 'Avoid pid: host unless you are building low-level host tooling and understand the security implications.'
+      });
+    }
+    if (svc?.ipc === 'host') {
+      findings.push({
+        id: 'compose.ipc-host',
+        title: 'Host IPC namespace (ipc: host)',
+        severity: 'high',
+        message: `Service '${serviceName}' uses ipc: host, exposing host IPC namespace to the container.`,
+        service: serviceName,
+        path: `${targetPath}#services.${serviceName}.ipc`,
+        suggestion: 'Avoid ipc: host. Prefer explicit shared volumes or redesign if IPC sharing is required.'
+      });
+    }
+
+    // Rule: unconfined security profiles
+    const securityOpt: any[] = Array.isArray(svc?.security_opt) ? svc.security_opt : [];
+    const sec = securityOpt.map((x) => String(x).toLowerCase());
+    const hasUnconfined = sec.some((x) => x.includes('seccomp') && x.includes('unconfined')) || sec.some((x) => x.includes('apparmor') && x.includes('unconfined')) || sec.some((x) => x.includes('label:disable'));
+    if (hasUnconfined) {
+      findings.push({
+        id: 'compose.security-unconfined',
+        title: 'Security profile disabled (unconfined)',
+        severity: 'high',
+        message: `Service '${serviceName}' disables container security profiles via security_opt (${securityOpt.join(', ')}).`,
+        service: serviceName,
+        path: `${targetPath}#services.${serviceName}.security_opt`,
+        suggestion: 'Avoid unconfined security profiles. Remove the option or use a minimal custom seccomp/apparmor profile.'
       });
     }
 

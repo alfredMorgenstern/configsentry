@@ -8,7 +8,8 @@ Developer-first guardrails for **docker-compose.yml** (security + ops footguns).
 ConfigSentry reads a Compose file and flags common **high-impact** mistakes:
 - privileged containers (`privileged: true`)
 - dangerous capabilities (`cap_add: [ALL]`)
-- host namespaces (`network_mode: host`, `pid: host`)
+- host namespaces (`network_mode: host`, `pid: host`, `ipc: host`)
+- unconfined security profiles (`security_opt: ["seccomp=unconfined"]` / `apparmor:unconfined`)
 - Docker socket mounts (`/var/run/docker.sock`)
 - sensitive ports exposed publicly (e.g. `5432:5432` instead of `127.0.0.1:5432:5432`)
 - missing `restart:` policy

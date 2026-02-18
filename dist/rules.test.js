@@ -31,3 +31,13 @@ test('detects pid: host', () => {
     const findings = runRules(compose, 'docker-compose.yml');
     assert.ok(findings.some((f) => f.id === 'compose.pid-host' && f.service === 'app'));
 });
+test('detects ipc: host', () => {
+    const compose = { services: { app: { ipc: 'host' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.ipc-host' && f.service === 'app'));
+});
+test('detects unconfined security_opt', () => {
+    const compose = { services: { app: { security_opt: ['seccomp=unconfined'] } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.security-unconfined' && f.service === 'app'));
+});
