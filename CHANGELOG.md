@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.12
+- Rules: detect `cap_add: [ALL]`
+- Rules: detect host namespaces (`network_mode: host`, `pid: host`, `ipc: host`)
+- Rules: detect unconfined security profiles via `security_opt` (`seccomp=unconfined`, `apparmor=unconfined`, `label:disable`)
+
 ## v0.0.11
 - Docs: add npm version badge + make npx quickstart primary
 
