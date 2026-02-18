@@ -57,6 +57,8 @@ node dist/cli.js ./docker-compose.yml --baseline .configsentry-baseline.json
 
 ## Use in GitHub Actions (copy/paste)
 
+More examples: [`docs/action-usage.md`](docs/action-usage.md)
+
 ### Option A: run from source
 
 ```yml
