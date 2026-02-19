@@ -40,3 +40,13 @@ Goal for today: pick one app idea with exit potential (fits Kompetenzen, avoids 
 - 12:55: MVP CLI scaffolded (TypeScript + yaml parser) + example compose file; CLI returns exit code 2 when findings exist (CI-friendly).
 - 12:58: Added minimal unit tests for key rules; `npm test` green.
 - 17:03: Re-ran tests; still green.
+
+# 2026-02-19 — Release alignment sprint
+
+- Released **v0.0.16**:
+  - npm published: `configsentry@0.0.16` (npx smoke test ok)
+  - git tag pushed: `v0.0.16`
+  - GitHub Release created: https://github.com/alfredMorgenstern/configsentry/releases/tag/v0.0.16
+  - Code Scanning workflow ran successfully for tag + master.
+
+Next: confirm Code Scanning results are visible in GitHub UI, and consider rotating npm token (it was pasted via Telegram).
