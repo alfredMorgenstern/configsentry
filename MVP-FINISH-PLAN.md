@@ -3,11 +3,11 @@
 Owner: Marius / Alfred
 
 Target outcome: one clean release where **everything matches**:
-- `package.json` version = `0.0.16`
-- git tag = `v0.0.16` pointing at the release commit
-- npm registry version = `0.0.16`
-- GitHub Release exists for `v0.0.16`
-- GitHub Code Scanning shows ConfigSentry SARIF results
+- `package.json` version = `0.0.16` (achieved) / latest release currently `0.0.18`
+- git tag = `v0.0.16` (achieved) / latest release tag currently `v0.0.18`
+- npm registry version = `0.0.16` (achieved) / latest registry version currently `0.0.18`
+- GitHub Release exists (achieved)
+- GitHub Code Scanning shows ConfigSentry SARIF results (achieved)
 
 > Note: remote tags `v0.0.14` and `v0.0.15` already exist historically, so we will **not** rewrite them. We ship the next aligned release as **0.0.16**.
 
@@ -59,7 +59,7 @@ Target outcome: one clean release where **everything matches**:
 
 ## Phase D — Final consumer-ready docs polish
 
-- [x] Ensure docs use the latest tag everywhere (`v0.0.16`)
+- [x] Ensure docs use the latest tag everywhere (at least `v0.0.16`; updated further for subsequent releases)
   - [x] `README.md`
   - [x] `docs/action-usage.md`
   - [x] `.github/workflows/example-consumer.yml`
@@ -70,7 +70,7 @@ Target outcome: one clean release where **everything matches**:
   - [ ] `upload-sarif: true`
 
 **Acceptance criteria:**
-- [ ] A user can copy/paste docs into another repo and it works first try
+- [x] A user can copy/paste docs into another repo and it works first try (validated via https://github.com/alfredMorgenstern/configsentry-consumer-test)
 
 ---
 
