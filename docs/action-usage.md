@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: alfredMorgenstern/configsentry@v0.0.13
+      - uses: alfredMorgenstern/configsentry@v0.0.16
         with:
           target: .   # file or directory
           sarif: true
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: alfredMorgenstern/configsentry@v0.0.13
+      - uses: alfredMorgenstern/configsentry@v0.0.16
         with:
           target: .   # file or directory
           sarif: true
@@ -56,7 +56,7 @@ jobs:
 Generate a baseline once:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.13
+- uses: alfredMorgenstern/configsentry@v0.0.16
   with:
     target: .   # file or directory
     write-baseline: .configsentry-baseline.json
@@ -66,7 +66,7 @@ Generate a baseline once:
 Then use it in CI:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.13
+- uses: alfredMorgenstern/configsentry@v0.0.16
   with:
     target: .   # file or directory
     baseline: .configsentry-baseline.json

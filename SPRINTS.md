@@ -1,5 +1,8 @@
 # Sidehustle Sprints — 2026-02-16
 
+## MVP finish plan
+See: `MVP-FINISH-PLAN.md` (task checklist + acceptance criteria). Use this in next sprint ticks to close the last ~15%.
+
 Goal for today: pick one app idea with exit potential (fits Kompetenzen, avoids Hauptjob competition, minimizes need for outbound sales/marketing), then build an MVP by evening.
 
 ## Sprint Plan (today)

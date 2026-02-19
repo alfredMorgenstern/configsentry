@@ -1,6 +1,6 @@
 {
   "name": "configsentry",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "Developer-first guardrails for docker-compose.yml (security + ops footguns).",
   "type": "module",
   "license": "MIT",

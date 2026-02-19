@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.0.16
 - Packaging: shrink published tarball (exclude `src/` + `dist/**/*.test.js`)
 - Build: clean `dist/` before compiling (prevents stale files shipping)
 
