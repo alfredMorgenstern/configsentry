@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.13
+- Rules: detect host `/dev` mounts
+- Rules: detect dangerous device mappings (`/dev/kmsg`, `/dev/mem`, `/dev/kmem`)
+- Docs: add launch pack (copy/paste post + demo + positioning)
+
 ## v0.0.12
 - Rules: detect `cap_add: [ALL]`
 - Rules: detect host namespaces (`network_mode: host`, `pid: host`, `ipc: host`)
