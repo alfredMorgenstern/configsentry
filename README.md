@@ -111,6 +111,8 @@ jobs:
       #   security-events: write
 ```
 
+**Note (consumer repos):** your repo does **not** need a `package-lock.json`. The action installs/builds ConfigSentry from the action package itself.
+
 > Tip: pin to a tag (like `v0.0.18`) for reproducible builds.
 
 ## Exit codes
