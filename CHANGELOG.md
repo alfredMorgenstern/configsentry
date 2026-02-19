@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.17
+- Action: remove npm caching config so consumer repos without lockfiles don’t fail
+
 ## v0.0.16
 - Packaging: shrink published tarball (exclude `src/` + `dist/**/*.test.js`)
 - Build: clean `dist/` before compiling (prevents stale files shipping)
