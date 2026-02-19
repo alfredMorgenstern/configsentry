@@ -2,6 +2,8 @@
 
 This repository ships a **composite action** (see `action.yml`) so you can run ConfigSentry without installing it globally.
 
+> Note: `compose-file` is deprecated. Use `target` (file or directory) instead.
+
 ## Minimal workflow (no SARIF upload)
 
 ```yml
@@ -18,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: alfredMorgenstern/configsentry@v0.0.13
         with:
-          target: .
+          target: .   # file or directory
           sarif: true
           upload-sarif: false
           fail-on-findings: true
@@ -43,7 +45,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: alfredMorgenstern/configsentry@v0.0.13
         with:
-          target: .
+          target: .   # file or directory
           sarif: true
           upload-sarif: true
           fail-on-findings: false   # optional, prevents CI from failing while still surfacing alerts
@@ -56,7 +58,7 @@ Generate a baseline once:
 ```yml
 - uses: alfredMorgenstern/configsentry@v0.0.13
   with:
-    target: .
+    target: .   # file or directory
     write-baseline: .configsentry-baseline.json
     fail-on-findings: false
 ```
@@ -66,7 +68,7 @@ Then use it in CI:
 ```yml
 - uses: alfredMorgenstern/configsentry@v0.0.13
   with:
-    target: .
+    target: .   # file or directory
     baseline: .configsentry-baseline.json
     sarif: true
     upload-sarif: true

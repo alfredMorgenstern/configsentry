@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- Packaging: shrink published tarball (exclude `src/` + `dist/**/*.test.js`)
+- Build: clean `dist/` before compiling (prevents stale files shipping)
+
 ## v0.0.13
 - Rules: detect host `/dev` mounts
 - Rules: detect dangerous device mappings (`/dev/kmsg`, `/dev/mem`, `/dev/kmem`)

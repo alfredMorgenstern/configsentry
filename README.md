@@ -111,7 +111,7 @@ jobs:
       #   security-events: write
 ```
 
-> Tip: pin to a tag (like `v0.0.8`) for reproducible builds.
+> Tip: pin to a tag (like `v0.0.13`) for reproducible builds.
 
 ## Exit codes
 - `0` no findings
@@ -125,7 +125,7 @@ node dist/cli.js ./example.docker-compose.yml
 ```
 
 ## Next steps
-- publish as `configsentry` on npm
-- GitHub Action wrapper
-- SARIF output
+- GitHub Marketplace listing (Action)
+- more rules (policy packs for common stacks)
+- PR annotations/comments (optional)
 - autofix mode (`--fix`) for safe transforms

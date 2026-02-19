@@ -18,7 +18,7 @@
   },
   "files": [
     "dist/",
-    "src/",
+    "!dist/**/*.test.js",
     "README.md",
     "LICENSE"
   ],
@@ -27,7 +27,7 @@
   },
   "scripts": {
     "test": "node --test dist/**/*.test.js",
-    "build": "tsc -p tsconfig.json",
+    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.json",
     "prepack": "npm run build",
     "start": "node dist/cli.js",
     "dev": "node --loader ts-node/esm src/cli.ts",

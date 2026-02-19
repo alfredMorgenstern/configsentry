@@ -1,6 +1,6 @@
 # Publishing
 
-This repo is prepared for npm publishing; the remaining work is authentication + `npm publish`.
+This repo is prepared for npm publishing + GitHub release tagging; the remaining work is authentication + pushing tags.
 
 ## Prereqs
 - npm account that owns the package name `configsentry`
@@ -11,28 +11,45 @@ This repo is prepared for npm publishing; the remaining work is authentication +
    ```bash
    npm view configsentry version
    ```
+
 1) Ensure tests pass:
    ```bash
    npm ci
    npm run build
    npm test
    ```
+
 2) Login:
    ```bash
    npm login
    npm whoami
    ```
-3) Ensure package is publishable:
-   - `package.json` must have `"private": false`
-4) Dry run:
+
+3) Bump version (choose ONE approach):
+   - Manual: edit `package.json` version
+   - npm-managed:
+     ```bash
+     npm version patch   # or minor/major
+     ```
+     This creates a git commit + tag like `v0.0.14`.
+
+4) Dry run the package contents:
    ```bash
    npm pack
+   tar -tf configsentry-*.tgz | head
    ```
-5) Publish:
+
+5) Publish to npm:
    ```bash
    npm publish
    ```
-   (publishConfig sets access=public)
+   (`publishConfig` sets access=public)
+
+6) Push git tag + create GitHub Release:
+   ```bash
+   git push origin --follow-tags
+   ```
+   The repo has a workflow that creates a GitHub Release on `v*` tags (`.github/workflows/release.yml`).
 
 ## Notes
 - The CLI entrypoint is `dist/cli.js` and is exposed as `configsentry` via `bin`.
