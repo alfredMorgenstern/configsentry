@@ -1,0 +1,18 @@
+# ConfigSentry demo output
+
+Generated via:
+
+- `npx configsentry ./docs/demo/docker-compose.demo.yml`
+
+Expected:
+- exits with code 2 (findings)
+- prints actionable findings with fixes
+
+Example output (trimmed):
+
+- [HIGH] Privileged container (compose.privileged)
+- [HIGH] Docker socket mounted (compose.docker-socket)
+- [HIGH] Sensitive port exposed publicly (compose.exposed-sensitive-port)
+- [MEDIUM] Missing restart policy (compose.missing-restart)
+
+(For full output, run the command above.)
