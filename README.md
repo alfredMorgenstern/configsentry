@@ -4,6 +4,37 @@
 
 Developer-first guardrails for **docker-compose.yml** (security + ops footguns).
 
+## 60-second quickstart
+
+### Local (npx)
+
+```bash
+npx configsentry ./docker-compose.yml
+```
+
+### GitHub Action (minimal)
+
+```yml
+- uses: alfredMorgenstern/configsentry@v0.0.18
+  with:
+    target: .
+```
+
+### GitHub Code Scanning (SARIF upload)
+
+```yml
+permissions:
+  contents: read
+  security-events: write
+
+- uses: alfredMorgenstern/configsentry@v0.0.18
+  with:
+    target: .
+    sarif: true
+    upload-sarif: true
+    fail-on-findings: false
+```
+
 ## What it does
 ConfigSentry reads a Compose file and flags common **high-impact** mistakes:
 - privileged containers (`privileged: true`)
