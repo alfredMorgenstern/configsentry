@@ -25,5 +25,6 @@ npx configsentry ./docker-compose.yml
 If you want it in CI: there’s a **GitHub Action** and it can upload SARIF to **GitHub Code Scanning**.
 
 Repo: https://github.com/alfredMorgenstern/configsentry
+npm: https://www.npmjs.com/package/configsentry
 
 If there’s a rule you’d like to see (or if you hit false positives), open an issue and I’ll adjust.

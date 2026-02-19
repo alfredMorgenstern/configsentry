@@ -18,6 +18,7 @@
 > GitHub Action + SARIF Code Scanning supported.
 >
 > Repo: https://github.com/alfredMorgenstern/configsentry
+> npm: https://www.npmjs.com/package/configsentry
 
 ## 2) 30-second demo snippet (for screenshots)
 
