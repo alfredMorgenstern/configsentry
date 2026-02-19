@@ -50,3 +50,8 @@ Goal for today: pick one app idea with exit potential (fits Kompetenzen, avoids 
   - Code Scanning workflow ran successfully for tag + master.
 
 Next: confirm Code Scanning results are visible in GitHub UI, and consider rotating npm token (it was pasted via Telegram).
+
+# 2026-02-19 — Launch
+
+- Reddit launch post (r/selfhosted, flair: Docker Management):
+  https://www.reddit.com/r/selfhosted/comments/1r98qiw/configsentry_a_tiny_linter_for_dockercomposeyml/
