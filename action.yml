@@ -44,16 +44,21 @@ runs:
 
     - name: Install
       shell: bash
+      working-directory: ${{ github.action_path }}
       run: npm ci
 
     - name: Build
       shell: bash
+      working-directory: ${{ github.action_path }}
       run: npm run build
 
     - name: Run ConfigSentry
       shell: bash
       run: |
         set -euo pipefail
+        ACTION_PATH="${{ github.action_path }}"
+        WORKSPACE="${{ github.workspace }}"
+
         TARGET="${{ inputs.target }}"
         # Back-compat: if target is unset/blank, fall back to compose-file.
         if [[ -z "$TARGET" ]]; then TARGET="${{ inputs.compose-file }}"; fi
@@ -65,22 +70,25 @@ runs:
         if [[ -n "$BASELINE" ]]; then FLAGS+=("--baseline" "$BASELINE"); fi
         if [[ -n "$WRITE_BASELINE" ]]; then FLAGS+=("--write-baseline" "$WRITE_BASELINE"); fi
 
+        CLI="$ACTION_PATH/dist/cli.js"
+        SARIF_OUT="$WORKSPACE/configsentry.sarif.json"
+
         if [[ "${{ inputs.sarif }}" == "true" ]]; then
           # Always generate SARIF when requested.
-          node dist/cli.js "$TARGET" --sarif "${FLAGS[@]}" > configsentry.sarif.json || true
+          node "$CLI" "$TARGET" --sarif "${FLAGS[@]}" > "$SARIF_OUT" || true
         fi
 
         # If we're writing a baseline, never fail.
         if [[ -n "$WRITE_BASELINE" ]]; then
-          node dist/cli.js "$TARGET" "${FLAGS[@]}" || true
+          node "$CLI" "$TARGET" "${FLAGS[@]}" || true
           exit 0
         fi
 
         # Control whether findings should fail the job.
         if [[ "${{ inputs.fail-on-findings }}" == "true" ]]; then
-          node dist/cli.js "$TARGET" "${FLAGS[@]}"
+          node "$CLI" "$TARGET" "${FLAGS[@]}"
         else
-          node dist/cli.js "$TARGET" "${FLAGS[@]}" || true
+          node "$CLI" "$TARGET" "${FLAGS[@]}" || true
         fi
 
     - name: Upload SARIF artifact

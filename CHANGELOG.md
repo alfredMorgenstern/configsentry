@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.18
+- Action: run install/build from `github.action_path` (no dependency on consumer repo lockfiles)
+
 ## v0.0.17
 - Action: remove npm caching config so consumer repos without lockfiles don’t fail
 
