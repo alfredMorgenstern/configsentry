@@ -15,79 +15,54 @@ Target outcome: one clean release where **everything matches**:
 
 ## Phase A — Version alignment + release hygiene
 
-- [ ] Confirm current state (for log):
-  - [ ] `node -p 'require("./package.json").version'`
-  - [ ] `npm view configsentry version`
-  - [ ] `git rev-parse --short HEAD`
-  - [ ] `git ls-remote --tags origin 'v0.0.1[3-6]'`
-
-- [ ] Set release version to **0.0.16**
-  - [ ] Update `package.json` version -> `0.0.16`
-  - [ ] Update `CHANGELOG.md`: move “Unreleased” items under `## v0.0.16`
-
-- [ ] Validate locally
-  - [ ] `npm test`
-  - [ ] `npm pack --dry-run`
-    - [ ] Confirm tarball contains runtime only (no `src/`)
-    - [ ] Confirm excludes `dist/**/*.test.js`
-
-- [ ] Commit + tag
-  - [ ] `git add -A`
-  - [ ] `git commit -m 'chore(release): v0.0.16'`
-  - [ ] `git tag v0.0.16`
-
-- [ ] Push
-  - [ ] `git push origin master`
-  - [ ] `git push origin v0.0.16`
+- [x] Confirm current state (for log)
+- [x] Set release version to **0.0.16**
+- [x] Validate locally (`npm test`, `npm pack --dry-run`)
+- [x] Commit + tag (`chore(release): v0.0.16`, tag `v0.0.16`)
+- [x] Push (master + tag)
 
 **Acceptance criteria:**
-- [ ] `v0.0.16` exists on origin and points to the release commit
-- [ ] CI is green
+- [x] `v0.0.16` exists on origin and points to the release commit
+- [x] CI is green
 
 ---
 
 ## Phase B — Publish to npm (using saved token)
 
-- [ ] Ensure npm auth is configured on the machine
-  - [ ] Prefer `~/.npmrc` via token (read from `.credentials/npm_token.txt`)
-  - [ ] Verify: `npm whoami`
-
-- [ ] Publish
-  - [ ] `npm publish`
-
-- [ ] Verify
-  - [ ] `npm view configsentry version` returns `0.0.16`
-  - [ ] Smoke test from a clean dir:
-    - [ ] `npx configsentry ./docker-compose.yml` (use a tiny sample compose)
+- [x] Ensure npm auth is configured on the machine (via saved token)
+- [x] Publish (`npm publish`)
+- [x] Verify:
+  - [x] `npm view configsentry version` returns `0.0.16`
+  - [x] `npx configsentry ./docker-compose.yml` smoke test works
 
 **Acceptance criteria:**
-- [ ] npm registry shows `0.0.16`
-- [ ] `npx configsentry …` works
+- [x] npm registry shows `0.0.16`
+- [x] `npx configsentry …` works
 
 ---
 
 ## Phase C — GitHub Release + SARIF proof in Code Scanning
 
-- [ ] GitHub Release
-  - [ ] Confirm Release workflow ran for `v0.0.16`
-  - [ ] Confirm a GitHub Release exists and has auto notes
+- [x] GitHub Release:
+  - [x] Release workflow ran for `v0.0.16`
+  - [x] GitHub Release exists (auto notes)
 
-- [ ] Code Scanning proof
-  - [ ] Trigger / run `.github/workflows/code-scanning.yml`
-  - [ ] Confirm results appear under **Security → Code scanning**
-  - [ ] Confirm SARIF upload step succeeds (`github/codeql-action/upload-sarif@v4`)
+- [x] Code Scanning proof:
+  - [x] Workflow ran (`.github/workflows/code-scanning.yml`)
+  - [x] Results appear under **Security → Code scanning** (alerts exist)
+  - [x] SARIF upload step succeeded
 
 **Acceptance criteria:**
-- [ ] Code Scanning shows ConfigSentry tool results
+- [x] Code Scanning shows ConfigSentry tool results
 
 ---
 
 ## Phase D — Final consumer-ready docs polish
 
-- [ ] Ensure docs use the latest tag everywhere (`v0.0.16`)
-  - [ ] `README.md`
-  - [ ] `docs/action-usage.md`
-  - [ ] `.github/workflows/example-consumer.yml`
+- [x] Ensure docs use the latest tag everywhere (`v0.0.16`)
+  - [x] `README.md`
+  - [x] `docs/action-usage.md`
+  - [x] `.github/workflows/example-consumer.yml`
 
 - [ ] Add a small “Release checklist” snippet to `PUBLISHING.md`
 - [ ] Optional: add a minimal copy/paste workflow that includes:

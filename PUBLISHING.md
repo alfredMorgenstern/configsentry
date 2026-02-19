@@ -6,6 +6,25 @@ This repo is prepared for npm publishing + GitHub release tagging; the remaining
 - npm account that owns the package name `configsentry`
 - logged in locally: `npm login`
 
+## Release checklist (quick)
+
+```bash
+# 1) tests
+npm ci && npm run build && npm test
+
+# 2) bump + commit
+# (manual edit package.json OR npm version patch)
+
+# 3) sanity check tarball
+npm pack --dry-run
+
+# 4) publish
+npm publish
+
+# 5) push tag + confirm GitHub Release workflow
+git push origin --follow-tags
+```
+
 ## Steps
 0) Confirm package name availability (optional):
    ```bash
