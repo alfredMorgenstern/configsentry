@@ -111,7 +111,7 @@ jobs:
       #   security-events: write
 ```
 
-> Tip: pin to a tag (like `v0.0.13`) for reproducible builds.
+> Tip: pin to a tag (like `v0.0.18`) for reproducible builds.
 
 ## Exit codes
 - `0` no findings
