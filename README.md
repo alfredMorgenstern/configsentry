@@ -91,6 +91,12 @@ Then suppress baseline findings in CI:
 node dist/cli.js ./docker-compose.yml --baseline .configsentry-baseline.json
 ```
 
+## Docs
+
+- GitHub Action usage examples: [`docs/action-usage.md`](docs/action-usage.md)
+- Compatibility & scope: [`docs/compatibility.md`](docs/compatibility.md)
+- Launch pack (links + demo assets): [`docs/launch-pack.md`](docs/launch-pack.md)
+
 ## Use in GitHub Actions (copy/paste)
 
 More examples: [`docs/action-usage.md`](docs/action-usage.md)
