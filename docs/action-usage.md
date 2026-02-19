@@ -53,6 +53,8 @@ jobs:
 
 ## Baselines (incremental adoption)
 
+More details: [`docs/baselines.md`](baselines.md)
+
 Generate a baseline once:
 
 ```yml
