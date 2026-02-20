@@ -75,20 +75,20 @@ runs:
 
         if [[ "${{ inputs.sarif }}" == "true" ]]; then
           # Always generate SARIF when requested.
-          node "$CLI" "$TARGET" --sarif "${FLAGS[@]}" > "$SARIF_OUT" || true
+          node "$CLI" --target "$TARGET" --sarif "${FLAGS[@]}" > "$SARIF_OUT" || true
         fi
 
         # If we're writing a baseline, never fail.
         if [[ -n "$WRITE_BASELINE" ]]; then
-          node "$CLI" "$TARGET" "${FLAGS[@]}" || true
+          node "$CLI" --target "$TARGET" "${FLAGS[@]}" || true
           exit 0
         fi
 
         # Control whether findings should fail the job.
         if [[ "${{ inputs.fail-on-findings }}" == "true" ]]; then
-          node "$CLI" "$TARGET" "${FLAGS[@]}"
+          node "$CLI" --target "$TARGET" "${FLAGS[@]}"
         else
-          node "$CLI" "$TARGET" "${FLAGS[@]}" || true
+          node "$CLI" --target "$TARGET" "${FLAGS[@]}" || true
         fi
 
     - name: Upload SARIF artifact
