@@ -1,7 +1,7 @@
 # Changelog
 
-## Unreleased
-- Rules: flag sensitive host bind mounts in volumes (`/etc`, `/proc`, `/sys`)
+## v0.0.19
+- Rules: flag sensitive host bind mounts in volumes (`/etc`, `/proc`, `/sys`) (short + long syntax)
 - CLI: support `--target <file-or-dir>` (positional arg still supported)
 - Action: invoke CLI via `--target` to match input naming
 - Docs: prefer `--target` in CLI examples
