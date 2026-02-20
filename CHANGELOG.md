@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.20
+- Rules: suggest hardening via `read_only: true` (LOW severity)
+
 ## v0.0.19
 - Rules: flag sensitive host bind mounts in volumes (`/etc`, `/proc`, `/sys`) (short + long syntax)
 - CLI: support `--target <file-or-dir>` (positional arg still supported)
