@@ -100,6 +100,9 @@ node dist/cli.js --target ./docker-compose.yml --baseline .configsentry-baseline
 - Troubleshooting / FAQ: [`docs/troubleshooting.md`](docs/troubleshooting.md)
 - Launch pack (links + demo assets): [`docs/launch-pack.md`](docs/launch-pack.md)
 
+### Footguns (short explainers)
+- Docker socket mount: [`docs/footguns/docker-socket.md`](docs/footguns/docker-socket.md)
+
 ## Use in GitHub Actions (copy/paste)
 
 More examples: [`docs/action-usage.md`](docs/action-usage.md)
