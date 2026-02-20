@@ -65,3 +65,15 @@ Next: confirm Code Scanning results are visible in GitHub UI, and consider rotat
     - `upload-sarif: true`
 
 Remaining: (seems) none in MVP-FINISH-PLAN.md — needs a quick re-scan/confirmation.
+
+# 2026-02-20 — Action/CLI DX alignment
+
+- Added `--target <file-or-dir>` support to the CLI (positional arg still works).
+- Updated the composite action to call the CLI using `--target`.
+
+Commits:
+- 8d6f419 dx: support --target flag in CLI
+- 7a37dbb build: update dist for --target support
+- c9670b1 dx(action): use --target flag when invoking CLI
+
+Next: ship as a patch release (e.g., v0.0.19) so action consumers get the improvement.
