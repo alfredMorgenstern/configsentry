@@ -96,6 +96,7 @@ node dist/cli.js ./docker-compose.yml --baseline .configsentry-baseline.json
 - GitHub Action usage examples: [`docs/action-usage.md`](docs/action-usage.md)
 - Baselines (incremental adoption): [`docs/baselines.md`](docs/baselines.md)
 - Compatibility & scope: [`docs/compatibility.md`](docs/compatibility.md)
+- Troubleshooting / FAQ: [`docs/troubleshooting.md`](docs/troubleshooting.md)
 - Launch pack (links + demo assets): [`docs/launch-pack.md`](docs/launch-pack.md)
 
 ## Use in GitHub Actions (copy/paste)
