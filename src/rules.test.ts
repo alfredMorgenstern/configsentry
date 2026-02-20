@@ -91,3 +91,15 @@ test('detects dangerous device mapping', () => {
   const findings = runRules(compose, 'docker-compose.yml');
   assert.ok(findings.some((f) => f.id === 'compose.dangerous-device' && f.service === 'app'));
 });
+
+test('suggests read_only hardening', () => {
+  const compose = { services: { app: { image: 'nginx:alpine' } } };
+  const findings = runRules(compose, 'docker-compose.yml');
+  assert.ok(findings.some((f) => f.id === 'compose.missing-read-only' && f.service === 'app'));
+});
+
+test('does not warn about read_only when set', () => {
+  const compose = { services: { app: { read_only: true } } };
+  const findings = runRules(compose, 'docker-compose.yml');
+  assert.ok(!findings.some((f) => f.id === 'compose.missing-read-only' && f.service === 'app'));
+});

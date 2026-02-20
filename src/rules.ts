@@ -271,6 +271,20 @@ export function runRules(compose: any, targetPath: string): Finding[] {
       });
     }
 
+    // Rule: filesystem not read-only (hardening)
+    // Low severity because many images expect write access unless explicitly designed for read-only.
+    if (svc?.read_only !== true) {
+      findings.push({
+        id: 'compose.missing-read-only',
+        title: 'Filesystem not set to read-only',
+        severity: 'low',
+        message: `Service '${serviceName}' does not set read_only: true (container filesystem is writable by default).`,
+        service: serviceName,
+        path: `${targetPath}#services.${serviceName}.read_only`,
+        suggestion: 'Consider setting read_only: true + add explicit writable mounts (e.g. tmpfs:/tmp or a data volume) if the app supports it.'
+      });
+    }
+
     // Rule: exposed sensitive ports
     const ports = normalizePorts(svc?.ports);
     for (const p of ports) {
