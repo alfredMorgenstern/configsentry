@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- Rules: flag sensitive host bind mounts in volumes (`/etc`, `/proc`, `/sys`)
+- CLI: support `--target <file-or-dir>` (positional arg still supported)
+- Action: invoke CLI via `--target` to match input naming
+- Docs: prefer `--target` in CLI examples
+
 ## v0.0.18
 - Action: run install/build from `github.action_path` (no dependency on consumer repo lockfiles)
 

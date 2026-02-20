@@ -42,6 +42,7 @@ ConfigSentry reads a Compose file and flags common **high-impact** mistakes:
 - host namespaces (`network_mode: host`, `pid: host`, `ipc: host`)
 - unconfined security profiles (`security_opt: ["seccomp=unconfined"]` / `apparmor:unconfined`)
 - Docker socket mounts (`/var/run/docker.sock`)
+- sensitive host mounts (`/etc`, `/proc`, `/sys`)
 - sensitive ports exposed publicly (e.g. `5432:5432` instead of `127.0.0.1:5432:5432`)
 - missing `restart:` policy
 - missing `healthcheck:`
