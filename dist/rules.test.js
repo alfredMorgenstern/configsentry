@@ -16,6 +16,21 @@ test('detects docker socket mount', () => {
     const findings = runRules(compose, 'docker-compose.yml');
     assert.ok(findings.some((f) => f.id === 'compose.docker-socket' && f.service === 'runner'));
 });
+test('supports long syntax bind mounts', () => {
+    const compose = {
+        services: {
+            app: {
+                volumes: [
+                    { type: 'bind', source: '/etc', target: '/host-etc' },
+                    { type: 'bind', source: '/dev', target: '/host-dev' },
+                ],
+            },
+        },
+    };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.host-etc-mount' && f.service === 'app'));
+    assert.ok(findings.some((f) => f.id === 'compose.host-dev-mount' && f.service === 'app'));
+});
 test('detects cap_add: ALL', () => {
     const compose = { services: { app: { cap_add: ['ALL'] } } };
     const findings = runRules(compose, 'docker-compose.yml');

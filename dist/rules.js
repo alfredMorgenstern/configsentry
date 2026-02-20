@@ -113,19 +113,37 @@ export function runRules(compose, targetPath) {
         // Rule: docker socket mount
         const volumes = Array.isArray(svc?.volumes) ? svc.volumes : [];
         for (const v of volumes) {
-            if (typeof v !== 'string')
+            // Support both short syntax (string) and long syntax (object).
+            // Long syntax example:
+            //   - type: bind
+            //     source: /etc
+            //     target: /host-etc
+            let raw = '';
+            let hostPath;
+            if (typeof v === 'string') {
+                raw = v;
+                hostPath = v.split(':')[0];
+            }
+            else if (v && typeof v === 'object') {
+                raw = JSON.stringify(v);
+                const type = String(v.type ?? '').toLowerCase();
+                if (type === '' || type === 'bind') {
+                    hostPath = v.source ?? v.src;
+                }
+            }
+            else {
                 continue;
+            }
             // Rule: sensitive host path mounts
-            // Only consider bind mounts where the host path is the first segment before ':' and starts with '/'.
-            const hostPath = v.split(':')[0];
-            if (hostPath?.startsWith('/')) {
+            // Only consider bind mounts where the host path is absolute.
+            if (typeof hostPath === 'string' && hostPath.startsWith('/')) {
                 const hp = hostPath.replace(/\/$/, '');
                 if (hp === '/etc' || hp.startsWith('/etc/')) {
                     findings.push({
                         id: 'compose.host-etc-mount',
                         title: 'Sensitive host path mounted (/etc)',
                         severity: 'high',
-                        message: `Service '${serviceName}' mounts host /etc into the container ('${v}').`,
+                        message: `Service '${serviceName}' mounts host /etc into the container ('${raw}').`,
                         service: serviceName,
                         path: `${targetPath}#services.${serviceName}.volumes`,
                         suggestion: 'Avoid mounting /etc. If you only need a single config file, mount that file explicitly read-only.'
@@ -136,7 +154,7 @@ export function runRules(compose, targetPath) {
                         id: 'compose.host-proc-mount',
                         title: 'Sensitive host path mounted (/proc)',
                         severity: 'high',
-                        message: `Service '${serviceName}' mounts host /proc into the container ('${v}').`,
+                        message: `Service '${serviceName}' mounts host /proc into the container ('${raw}').`,
                         service: serviceName,
                         path: `${targetPath}#services.${serviceName}.volumes`,
                         suggestion: 'Avoid mounting /proc. If you need host metrics, prefer safer exporters or explicit APIs.'
@@ -147,14 +165,14 @@ export function runRules(compose, targetPath) {
                         id: 'compose.host-sys-mount',
                         title: 'Sensitive host path mounted (/sys)',
                         severity: 'high',
-                        message: `Service '${serviceName}' mounts host /sys into the container ('${v}').`,
+                        message: `Service '${serviceName}' mounts host /sys into the container ('${raw}').`,
                         service: serviceName,
                         path: `${targetPath}#services.${serviceName}.volumes`,
                         suggestion: 'Avoid mounting /sys. If hardware/host introspection is required, isolate the container and mount only specific needed subpaths read-only.'
                     });
                 }
             }
-            if (v.includes('/var/run/docker.sock')) {
+            if (raw.includes('/var/run/docker.sock')) {
                 findings.push({
                     id: 'compose.docker-socket',
                     title: 'Docker socket mounted',
@@ -165,23 +183,23 @@ export function runRules(compose, targetPath) {
                     suggestion: 'Avoid mounting the docker socket. If you need it, isolate the runner and treat it as privileged infrastructure.'
                 });
             }
-            if (v.startsWith('/:') || v.startsWith('/:/')) {
+            if (raw.startsWith('/:') || raw.startsWith('/:/') || hostPath === '/') {
                 findings.push({
                     id: 'compose.host-root-mount',
                     title: 'Host root mounted',
                     severity: 'high',
-                    message: `Service '${serviceName}' appears to mount the host root filesystem ('${v}').`,
+                    message: `Service '${serviceName}' appears to mount the host root filesystem ('${raw}').`,
                     service: serviceName,
                     path: `${targetPath}#services.${serviceName}.volumes`,
                     suggestion: 'Avoid mounting /. Mount only specific directories required by the app.'
                 });
             }
-            if (v.startsWith('/dev:/dev') || v.startsWith('/dev/:/dev')) {
+            if (raw.startsWith('/dev:/dev') || raw.startsWith('/dev/:/dev') || hostPath === '/dev') {
                 findings.push({
                     id: 'compose.host-dev-mount',
                     title: 'Host /dev mounted into container',
                     severity: 'high',
-                    message: `Service '${serviceName}' mounts host /dev into the container ('${v}'), which can enable device access and privilege escalation.`,
+                    message: `Service '${serviceName}' mounts host /dev into the container ('${raw}'), which can enable device access and privilege escalation.`,
                     service: serviceName,
                     path: `${targetPath}#services.${serviceName}.volumes`,
                     suggestion: 'Avoid mounting /dev. If hardware access is required, map only the specific device(s) needed via devices:.'
