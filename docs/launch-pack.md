@@ -4,6 +4,24 @@
 
 (When Reddit filters are trigger-happy: keep the **post itself discussion-first**, then drop links in the **first comment**.)
 
+### Ultra-low-promo variant (for strict subs like r/docker)
+
+**Post body (no tool name, no links):**
+
+I keep seeing the same few Docker Compose mistakes cause real headaches (security + reliability).
+
+Examples:
+- `privileged`, docker socket mounts
+- host namespaces (`network_mode: host`, `pid: host`)
+- binding DB ports to `0.0.0.0`
+- missing healthchecks/restart policies
+- running as root
+- mounting host `/etc`, `/proc`, `/sys`
+
+What are the Compose “footguns” you’ve actually been burned by, and what would you want a simple checker to flag (or *not* flag)?
+
+**If someone asks for the tool:** reply with links in a comment (repo + npm + docs).
+
 ### Suggested titles (pick one)
 - "Tiny linter for docker-compose.yml footguns (privileged, docker.sock, host mounts)"
 - "What are your worst docker-compose.yml footguns? I built a tiny linter to catch mine"
