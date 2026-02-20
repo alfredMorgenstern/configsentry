@@ -19,7 +19,12 @@ function parseArgs(argv) {
     const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
     const writeBaselineIdx = args.indexOf('--write-baseline');
     const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
-    const target = args.find((a) => !a.startsWith('-'));
+    // Prefer explicit flag (matches the GitHub Action input)
+    const targetIdx = args.indexOf('--target');
+    const targetFromFlag = targetIdx >= 0 ? args[targetIdx + 1] : undefined;
+    // Back-compat: first positional arg
+    const targetFromPositional = args.find((a) => !a.startsWith('-'));
+    const target = targetFromFlag ?? targetFromPositional;
     return { args, help, version, output, baselinePath, writeBaselinePath, target };
 }
 function usage() {
@@ -27,6 +32,7 @@ function usage() {
 
 Usage:
   configsentry <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]
+  configsentry --target <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]
 
 Output:
   --json           machine-readable findings
