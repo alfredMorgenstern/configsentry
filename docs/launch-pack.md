@@ -4,6 +4,11 @@
 
 (When Reddit filters are trigger-happy: keep the **post itself discussion-first**, then drop links in the **first comment**.)
 
+### Suggested titles (pick one)
+- "Tiny linter for docker-compose.yml footguns (privileged, docker.sock, host mounts)"
+- "What are your worst docker-compose.yml footguns? I built a tiny linter to catch mine"
+- "Compose guardrails: catching high-impact security/ops mistakes before they ship"
+
 **Post body draft:**
 
 > I built **ConfigSentry** — a tiny linter for `docker-compose.yml` that catches high-impact security + ops footguns.
@@ -64,7 +69,18 @@ ConfigSentry is a **developer-first Compose guardrail**. It’s not a full secur
 - “If this saves you from a footgun, star the repo so others find it.”
 
 ## 5) Where to post first (highest ROI)
-- r/selfhosted (lots of compose files)
-- r/docker
+- r/docker (usually less filter-happy than r/selfhosted)
+- r/selfhosted (lots of compose files, but filters can be aggressive)
+- r/devops (if positioned as “guardrails in CI”)
 - Hacker News “Show HN” (if you have a clean demo + GIF)
 - GitHub Marketplace (Action) listing later
+
+## 6) Modmail / appeal template (when removed)
+
+Subject: Post removed by filters — OSS Compose linter
+
+Body:
+> Hi mods — my post about an open-source tool (ConfigSentry) got removed by Reddit’s spam filters.
+> It’s a small linter for docker-compose.yml that flags high-impact footguns (privileged, docker socket mounts, sensitive host mounts, exposed DB ports).
+> I’m not selling anything; just sharing the repo and asking for feedback.
+> Could you approve the post if it fits the sub rules? Thanks!
