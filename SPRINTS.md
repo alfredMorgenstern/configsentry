@@ -55,3 +55,13 @@ Next: confirm Code Scanning results are visible in GitHub UI, and consider rotat
 
 - Reddit launch post (r/selfhosted, flair: Docker Management):
   https://www.reddit.com/r/selfhosted/comments/1r98qiw/configsentry_a_tiny_linter_for_dockercomposeyml/
+
+# 2026-02-20 — MVP finish checklist closeout
+
+- Marked Phase D doc tasks as done in `MVP-FINISH-PLAN.md`:
+  - `PUBLISHING.md` contains a quick Release checklist
+  - `docs/action-usage.md` contains a minimal Code Scanning workflow snippet with:
+    - `permissions: security-events: write`
+    - `upload-sarif: true`
+
+Remaining: (seems) none in MVP-FINISH-PLAN.md — needs a quick re-scan/confirmation.

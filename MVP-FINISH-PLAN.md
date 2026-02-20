@@ -64,10 +64,10 @@ Target outcome: one clean release where **everything matches**:
   - [x] `docs/action-usage.md`
   - [x] `.github/workflows/example-consumer.yml`
 
-- [ ] Add a small “Release checklist” snippet to `PUBLISHING.md`
-- [ ] Optional: add a minimal copy/paste workflow that includes:
-  - [ ] `permissions: security-events: write`
-  - [ ] `upload-sarif: true`
+- [x] Add a small “Release checklist” snippet to `PUBLISHING.md`
+- [x] Optional: add a minimal copy/paste workflow that includes:
+  - [x] `permissions: security-events: write`
+  - [x] `upload-sarif: true`
 
 **Acceptance criteria:**
 - [x] A user can copy/paste docs into another repo and it works first try (validated via https://github.com/alfredMorgenstern/configsentry-consumer-test)
