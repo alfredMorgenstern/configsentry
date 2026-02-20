@@ -15,7 +15,7 @@ This is intentional so you can distinguish **policy findings** from **tool failu
 In GitHub Actions:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.18
+- uses: alfredMorgenstern/configsentry@v0.0.20
   with:
     target: .
     sarif: true
@@ -55,7 +55,7 @@ npx configsentry .
 Action:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.18
+- uses: alfredMorgenstern/configsentry@v0.0.20
   with:
     target: .
 ```
