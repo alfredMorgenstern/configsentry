@@ -46,6 +46,19 @@ test('detects host /dev mount', () => {
     const findings = runRules(compose, 'docker-compose.yml');
     assert.ok(findings.some((f) => f.id === 'compose.host-dev-mount' && f.service === 'app'));
 });
+test('detects sensitive host mounts (/etc, /proc, /sys)', () => {
+    const compose = {
+        services: {
+            app: {
+                volumes: ['/etc:/host-etc:ro', '/proc:/host-proc:ro', '/sys:/host-sys:ro'],
+            },
+        },
+    };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.host-etc-mount' && f.service === 'app'));
+    assert.ok(findings.some((f) => f.id === 'compose.host-proc-mount' && f.service === 'app'));
+    assert.ok(findings.some((f) => f.id === 'compose.host-sys-mount' && f.service === 'app'));
+});
 test('detects dangerous device mapping', () => {
     const compose = { services: { app: { devices: ['/dev/kmsg:/dev/kmsg'] } } };
     const findings = runRules(compose, 'docker-compose.yml');

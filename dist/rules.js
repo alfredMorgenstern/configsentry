@@ -115,6 +115,45 @@ export function runRules(compose, targetPath) {
         for (const v of volumes) {
             if (typeof v !== 'string')
                 continue;
+            // Rule: sensitive host path mounts
+            // Only consider bind mounts where the host path is the first segment before ':' and starts with '/'.
+            const hostPath = v.split(':')[0];
+            if (hostPath?.startsWith('/')) {
+                const hp = hostPath.replace(/\/$/, '');
+                if (hp === '/etc' || hp.startsWith('/etc/')) {
+                    findings.push({
+                        id: 'compose.host-etc-mount',
+                        title: 'Sensitive host path mounted (/etc)',
+                        severity: 'high',
+                        message: `Service '${serviceName}' mounts host /etc into the container ('${v}').`,
+                        service: serviceName,
+                        path: `${targetPath}#services.${serviceName}.volumes`,
+                        suggestion: 'Avoid mounting /etc. If you only need a single config file, mount that file explicitly read-only.'
+                    });
+                }
+                if (hp === '/proc' || hp.startsWith('/proc/')) {
+                    findings.push({
+                        id: 'compose.host-proc-mount',
+                        title: 'Sensitive host path mounted (/proc)',
+                        severity: 'high',
+                        message: `Service '${serviceName}' mounts host /proc into the container ('${v}').`,
+                        service: serviceName,
+                        path: `${targetPath}#services.${serviceName}.volumes`,
+                        suggestion: 'Avoid mounting /proc. If you need host metrics, prefer safer exporters or explicit APIs.'
+                    });
+                }
+                if (hp === '/sys' || hp.startsWith('/sys/')) {
+                    findings.push({
+                        id: 'compose.host-sys-mount',
+                        title: 'Sensitive host path mounted (/sys)',
+                        severity: 'high',
+                        message: `Service '${serviceName}' mounts host /sys into the container ('${v}').`,
+                        service: serviceName,
+                        path: `${targetPath}#services.${serviceName}.volumes`,
+                        suggestion: 'Avoid mounting /sys. If hardware/host introspection is required, isolate the container and mount only specific needed subpaths read-only.'
+                    });
+                }
+            }
             if (v.includes('/var/run/docker.sock')) {
                 findings.push({
                     id: 'compose.docker-socket',
