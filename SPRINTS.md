@@ -76,4 +76,4 @@ Commits:
 - 7a37dbb build: update dist for --target support
 - c9670b1 dx(action): use --target flag when invoking CLI
 
-Next: ship as a patch release (e.g., v0.0.19) so action consumers get the improvement.
+Next: ship as a patch release (e.g., v0.0.19 / now prepared as v0.0.20) so action consumers get the improvement.
