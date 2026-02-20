@@ -17,6 +17,12 @@
 - Posting new ConfigSentry-related updates (as permitted by Marius).
 - Replying to comments about ConfigSentry.
 
+## If a post gets removed by Reddit filters
+- Prefer a **discussion-first** post body (no links), then put GitHub/npm links in a top-level comment.
+- Keep formatting simple; avoid link-heavy bullet lists.
+- If still removed, appeal via modmail with: “This is an OSS tool, not spam; can you approve?”
+- Fallback: post to r/docker, r/devops, or GitHub Discussions.
+
 ## Not allowed
 - DMing people.
 - Sharing personal context.

@@ -1,24 +1,33 @@
 # Launch Pack (copy/paste)
 
-## 1) 10-line launch post (Reddit / LinkedIn-ish)
+## 1) Filter-safe launch post (Reddit)
+
+(When Reddit filters are trigger-happy: keep the **post itself discussion-first**, then drop links in the **first comment**.)
+
+**Post body draft:**
 
 > I built **ConfigSentry** — a tiny linter for `docker-compose.yml` that catches high-impact security + ops footguns.
 >
-> It flags things like:
+> Examples it flags:
 > - `privileged: true`, `cap_add: [ALL]`
 > - `network_mode: host`, `pid: host`, `ipc: host`
 > - docker socket mounts, host root mounts, host `/dev` mounts
+> - sensitive host mounts (`/etc`, `/proc`, `/sys`)
 > - exposed sensitive ports (Postgres/Redis/etc)
 > - missing `restart:` / `healthcheck:` / `user:`
 >
-> Run it in 5 seconds:
+> Quick try:
 > ```bash
 > npx configsentry ./docker-compose.yml
 > ```
-> GitHub Action + SARIF Code Scanning supported.
 >
+> What other Compose “footguns” have bitten you in production/self-hosted setups?
+
+**First comment (links) draft:**
+
 > Repo: https://github.com/alfredMorgenstern/configsentry
 > npm: https://www.npmjs.com/package/configsentry
+> Action + Code Scanning SARIF docs: https://github.com/alfredMorgenstern/configsentry/blob/master/docs/action-usage.md
 
 ## 2) 30-second demo snippet (for screenshots)
 
