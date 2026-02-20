@@ -62,19 +62,19 @@ npx configsentry ./docker-compose.yml
 ```bash
 npm install
 npm run build
-node dist/cli.js ./docker-compose.yml
+node dist/cli.js --target ./docker-compose.yml
 ```
 
 ### JSON output (CI / tooling)
 
 ```bash
-node dist/cli.js ./docker-compose.yml --json
+node dist/cli.js --target ./docker-compose.yml --json
 ```
 
 ### SARIF output (GitHub Code Scanning)
 
 ```bash
-node dist/cli.js ./docker-compose.yml --sarif > configsentry.sarif.json
+node dist/cli.js --target ./docker-compose.yml --sarif > configsentry.sarif.json
 ```
 
 ## Baselines (incremental adoption)
@@ -82,13 +82,13 @@ node dist/cli.js ./docker-compose.yml --sarif > configsentry.sarif.json
 Generate a baseline (captures current findings):
 
 ```bash
-node dist/cli.js ./docker-compose.yml --write-baseline .configsentry-baseline.json
+node dist/cli.js --target ./docker-compose.yml --write-baseline .configsentry-baseline.json
 ```
 
 Then suppress baseline findings in CI:
 
 ```bash
-node dist/cli.js ./docker-compose.yml --baseline .configsentry-baseline.json
+node dist/cli.js --target ./docker-compose.yml --baseline .configsentry-baseline.json
 ```
 
 ## Docs
@@ -120,7 +120,7 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-      - run: node dist/cli.js ./docker-compose.yml
+      - run: node dist/cli.js --target ./docker-compose.yml
 ```
 
 ### Option B: use the ConfigSentry composite action
@@ -162,7 +162,7 @@ jobs:
 ## Example
 
 ```bash
-node dist/cli.js ./example.docker-compose.yml
+node dist/cli.js --target ./example.docker-compose.yml
 ```
 
 ## Next steps
