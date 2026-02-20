@@ -60,6 +60,17 @@ Action:
     target: .
 ```
 
+## “How do I run a specific version?”
+
+Recommended:
+
+```bash
+npm i -g configsentry@0.0.20
+configsentry ./docker-compose.yml
+```
+
+`npx configsentry` always pulls the latest, which is usually what you want.
+
 ## “I have findings, but I want incremental adoption”
 
 Use **baselines**:
