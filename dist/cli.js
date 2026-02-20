@@ -8,15 +8,43 @@ import { runRules } from './rules.js';
 import { findingsToSarif } from './sarif.js';
 import { resolveTargets } from './scan.js';
 import { applyBaseline, loadBaseline, writeBaseline } from './baseline.js';
+function parseArgs(argv) {
+    const args = argv.slice(2);
+    const help = args.includes('-h') || args.includes('--help');
+    const version = args.includes('-v') || args.includes('--version');
+    const json = args.includes('--json');
+    const sarif = args.includes('--sarif');
+    const output = json ? 'json' : sarif ? 'sarif' : 'pretty';
+    const baselineIdx = args.indexOf('--baseline');
+    const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
+    const writeBaselineIdx = args.indexOf('--write-baseline');
+    const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
+    const target = args.find((a) => !a.startsWith('-'));
+    return { args, help, version, output, baselinePath, writeBaselinePath, target };
+}
 function usage() {
-    console.log(`ConfigSentry (MVP)\n\nUsage:\n  configsentry <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]\n\nOutput:\n  --json           machine-readable findings\n  --sarif          SARIF 2.1.0 (for GitHub code scanning)\n\nBaselines:\n  --baseline <file>        suppress findings present in a baseline file\n  --write-baseline <file>  write baseline file for current findings and exit 0\n\nExit codes:\n  0 = no findings (after baseline suppression)
+    console.log(`ConfigSentry (MVP)
+
+Usage:
+  configsentry <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]
+
+Output:
+  --json           machine-readable findings
+  --sarif          SARIF 2.1.0 (for GitHub code scanning)
+
+Baselines:
+  --baseline <file>        suppress findings present in a baseline file
+  --write-baseline <file>  write baseline file for current findings and exit 0
+
+Exit codes:
+  0 = no findings (after baseline suppression)
   2 = findings present
   1 = error
 `);
 }
 async function main() {
-    const args = process.argv.slice(2);
-    if (args.includes('-v') || args.includes('--version')) {
+    const { args, help, version, output, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
+    if (version) {
         try {
             const here = path.dirname(fileURLToPath(import.meta.url));
             const pkgPath = path.resolve(here, '../package.json');
@@ -29,21 +57,19 @@ async function main() {
         }
         process.exit(0);
     }
-    if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
+    if (args.length === 0 || help) {
         usage();
         process.exit(0);
     }
-    const json = args.includes('--json');
-    const sarif = args.includes('--sarif');
-    if (json && sarif) {
+    if (output === 'json' && args.includes('--sarif')) {
+        // should be impossible due to parseArgs, but keep a clear message
         console.error('Error: choose only one output mode: --json or --sarif');
         process.exit(1);
     }
-    const baselineIdx = args.indexOf('--baseline');
-    const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
-    const writeBaselineIdx = args.indexOf('--write-baseline');
-    const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
-    const target = args.find((a) => !a.startsWith('-'));
+    if (output === 'sarif' && args.includes('--json')) {
+        console.error('Error: choose only one output mode: --json or --sarif');
+        process.exit(1);
+    }
     if (!target) {
         usage();
         process.exit(1);
@@ -73,10 +99,10 @@ async function main() {
         console.log(`Wrote baseline: ${path.resolve(writeBaselinePath)} (${allFindings.length} finding(s))`);
         process.exit(0);
     }
-    if (json) {
+    if (output === 'json') {
         console.log(JSON.stringify({ targetPaths, findings, suppressedCount: suppressed.length }, null, 2));
     }
-    else if (sarif) {
+    else if (output === 'sarif') {
         console.log(JSON.stringify(findingsToSarif(findings), null, 2));
     }
     else {
