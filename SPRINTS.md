@@ -190,3 +190,10 @@ Commit:
 
 Commit:
 - 8bd40f2 docs(demo): update output example for v0.0.23
+
+# 2026-02-21 — Feedback funnel
+
+- Added a small “Feedback / ideas” section in README linking to GitHub Issues (ask for sanitized minimal Compose snippet).
+
+Commit:
+- 4d3de04 docs: add feedback link to issues
