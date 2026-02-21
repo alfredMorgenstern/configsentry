@@ -107,3 +107,10 @@ Commit:
 
 Commit:
 - ca439fd docs: document CI compatibility matrix
+
+# 2026-02-21 — CLI output format flag
+
+- Added `--format <pretty|json|sarif>` (with `--json/--sarif` marked as deprecated in help).
+
+Commit:
+- 86b8494 dx(cli): add --format (pretty|json|sarif)
