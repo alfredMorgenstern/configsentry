@@ -173,6 +173,11 @@ jobs:
 node dist/cli.js --target ./example.docker-compose.yml
 ```
 
+## Feedback / ideas
+
+- Open an issue with a **sanitized minimal Compose snippet**:
+  https://github.com/alfredMorgenstern/configsentry/issues
+
 ## Next steps
 - GitHub Marketplace listing (Action)
 - more rules (policy packs for common stacks)
