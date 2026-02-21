@@ -41,7 +41,11 @@ Primarily **service-level** security + operations footguns, such as:
 ## Versions
 
 ### Node.js
-- Intended to run on modern Node.js (Action uses the Node version provided by the runner).
+- Intended to run on modern Node.js.
+- CI runs on Node **18/20/22**.
+
+### OS
+- CI runs on **ubuntu + macOS + Windows** to catch path/FS edge cases early.
 
 ### Docker Compose formats
 - Intended to work with typical Compose files used by `docker compose`.
