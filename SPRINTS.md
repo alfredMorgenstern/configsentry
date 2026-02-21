@@ -215,3 +215,13 @@ Commit:
 
 Commit:
 - aeaa7d4 docs: bump snippets to v0.0.24
+
+# 2026-02-22 — Patch release v0.0.25 (CLI --output)
+
+- Added `--output <file>` to write machine output (JSON/SARIF) directly to a file.
+  - Requires `--format json` or `--format sarif`.
+- Published **configsentry@0.0.25** to npm + tagged/pushed **v0.0.25**.
+
+Commits:
+- 6c3ccec dx(cli): add --output <file> for json/sarif
+- e044137 chore(release): v0.0.25
