@@ -2,7 +2,7 @@
 
 Generated via:
 
-- `npx configsentry ./docs/demo/docker-compose.demo.yml`
+- `npx configsentry@0.0.23 --target ./docs/demo/docker-compose.demo.yml`
 
 Expected:
 - exits with code 2 (findings)
@@ -13,6 +13,9 @@ Example output (trimmed):
 - [HIGH] Privileged container (compose.privileged)
 - [HIGH] Docker socket mounted (compose.docker-socket)
 - [HIGH] Sensitive port exposed publicly (compose.exposed-sensitive-port)
+- [HIGH] Dangerous Linux capabilities (compose.cap-add-all)
+- [HIGH] Host network namespace (compose.network-host)
 - [MEDIUM] Missing restart policy (compose.missing-restart)
+- [MEDIUM] Missing healthcheck (compose.missing-healthcheck)
 
 (For full output, run the command above.)
