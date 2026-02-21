@@ -169,3 +169,10 @@ Commit:
 
 Commit:
 - dd2da4d ci: run on master/PRs, ignore v* tags (reduce email noise)
+
+# 2026-02-21 — Adoption: draft request for real compose examples
+
+- Added a discussion-first Reddit draft asking for sanitized real-world `docker-compose.yml` examples to test ConfigSentry against.
+
+Commit:
+- 3f6cb46 docs: draft reddit post to request compose examples
