@@ -114,3 +114,10 @@ Commit:
 
 Commit:
 - 86b8494 dx(cli): add --format (pretty|json|sarif)
+
+# 2026-02-21 — Regression tests for --format
+
+- Added CLI tests to ensure `--format json` and `--format sarif` output valid JSON/SARIF and keep the expected exit codes.
+
+Commit:
+- d6126e4 test(cli): cover --format json/sarif
