@@ -197,3 +197,14 @@ Commit:
 
 Commit:
 - 4d3de04 docs: add feedback link to issues
+
+# 2026-02-21 — Patch release v0.0.24
+
+- Published **configsentry@0.0.24** to npm (latest tag).
+- Tagged + pushed **v0.0.24** on GitHub; GitHub Release workflow succeeded.
+
+Release:
+- https://github.com/alfredMorgenstern/configsentry/releases/tag/v0.0.24
+
+Commit:
+- f6cc6f4 chore(release): v0.0.24
