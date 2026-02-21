@@ -77,3 +77,10 @@ Commits:
 - c9670b1 dx(action): use --target flag when invoking CLI
 
 Next: ship as a patch release (e.g., v0.0.19 / now prepared as v0.0.20) so action consumers get the improvement.
+
+# 2026-02-21 — CI cross-platform coverage
+
+- Expanded CI matrix to run tests on **ubuntu + macOS + windows** (Node 18/20/22) to catch path/FS edge cases early.
+
+Commit:
+- f1da02b ci: test on ubuntu/macos/windows
