@@ -148,3 +148,10 @@ Context: CI failures spammed email because `npm test` relied on shell globbing a
 Commits:
 - 35930bf ci(test): run node --test with explicit dist test files (windows-safe)
 - bcbc4e4 chore(release): v0.0.23
+
+# 2026-02-21 — Docs bump for action consumers
+
+- Updated docs action snippets to reference **v0.0.23**.
+
+Commit:
+- 631f2c4 docs: bump action snippets to v0.0.23
