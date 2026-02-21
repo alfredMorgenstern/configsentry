@@ -183,3 +183,10 @@ Commit:
 
 Commit:
 - d808422 docs: bump baselines + example consumer workflow to v0.0.23
+
+# 2026-02-21 — Demo output refresh
+
+- Updated `docs/demo/output.txt` to use `npx configsentry@0.0.23 --target ...` and refreshed the trimmed rule list.
+
+Commit:
+- 8bd40f2 docs(demo): update output example for v0.0.23
