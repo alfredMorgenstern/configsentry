@@ -155,3 +155,10 @@ Commits:
 
 Commit:
 - 631f2c4 docs: bump action snippets to v0.0.23
+
+# 2026-02-21 — README tag bump (v0.0.23)
+
+- Updated README action snippets to reference **v0.0.23**.
+
+Commit:
+- 30544c2 docs: bump README action snippets to v0.0.23
