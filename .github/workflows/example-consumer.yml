@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Use the action from this repo (pin to a tag)
-      - uses: alfredMorgenstern/configsentry@v0.0.20
+      - uses: alfredMorgenstern/configsentry@v0.0.21
         with:
           target: ./docker-compose.yml
           sarif: true

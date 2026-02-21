@@ -38,7 +38,7 @@ npx configsentry ./docker-compose.yml --baseline .configsentry-baseline.json
 Run this on a branch and commit the generated file:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.20
+- uses: alfredMorgenstern/configsentry@v0.0.21
   with:
     target: .
     write-baseline: .configsentry-baseline.json
@@ -48,7 +48,7 @@ Run this on a branch and commit the generated file:
 ### Use baseline in CI
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.20
+- uses: alfredMorgenstern/configsentry@v0.0.21
   with:
     target: .
     baseline: .configsentry-baseline.json
