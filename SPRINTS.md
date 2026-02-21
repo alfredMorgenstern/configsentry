@@ -93,3 +93,10 @@ Commit:
 Notes:
 - `npx` smoke test worked (run from outside the repo dir).
 - Minor gotcha: `git push --tags` tried to push historical tags too; prefer pushing the single tag (`git push origin v0.0.21`).
+
+# 2026-02-21 — Docs consistency (v0.0.21)
+
+- Updated docs/README action snippets to reference the latest tag **v0.0.21** (action-usage, baselines, troubleshooting, README quickstart).
+
+Commit:
+- 9b85138 docs: bump action examples to v0.0.21
