@@ -208,3 +208,10 @@ Release:
 
 Commit:
 - f6cc6f4 chore(release): v0.0.24
+
+# 2026-02-22 — Docs consistency (v0.0.24)
+
+- Updated README/docs snippets to reference the latest tag **v0.0.24**.
+
+Commit:
+- aeaa7d4 docs: bump snippets to v0.0.24
