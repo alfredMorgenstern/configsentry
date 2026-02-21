@@ -102,6 +102,8 @@ node dist/cli.js --target ./docker-compose.yml --baseline .configsentry-baseline
 
 ### Footguns (short explainers)
 - Docker socket mount: [`docs/footguns/docker-socket.md`](docs/footguns/docker-socket.md)
+- Exposed DB ports: [`docs/footguns/exposed-db-ports.md`](docs/footguns/exposed-db-ports.md)
+- Risky host mounts: [`docs/footguns/host-mounts.md`](docs/footguns/host-mounts.md)
 
 ## Use in GitHub Actions (copy/paste)
 
