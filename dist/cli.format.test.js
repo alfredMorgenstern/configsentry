@@ -1,25 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 const here = process.cwd();
 function runCli(args) {
     const cliPath = path.join(here, 'dist', 'cli.js');
-    try {
-        const stdout = execFileSync(process.execPath, [cliPath, ...args], {
-            encoding: 'utf8',
-            stdio: ['ignore', 'pipe', 'pipe'],
-            maxBuffer: 10 * 1024 * 1024,
-        });
-        return { stdout, exitCode: 0 };
-    }
-    catch (e) {
-        // execFileSync throws on non-zero exit, but we still want stdout.
-        return {
-            stdout: String(e?.stdout ?? ''),
-            exitCode: typeof e?.status === 'number' ? e.status : 1,
-        };
-    }
+    const res = spawnSync(process.execPath, [cliPath, ...args], {
+        encoding: 'utf8',
+        maxBuffer: 10 * 1024 * 1024,
+    });
+    return {
+        stdout: res.stdout ?? '',
+        exitCode: typeof res.status === 'number' ? res.status : 1,
+    };
 }
 test('supports --format json', () => {
     const res = runCli(['--format', 'json', '--target', './example.docker-compose.yml']);
