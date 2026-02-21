@@ -121,3 +121,18 @@ Commit:
 
 Commit:
 - d6126e4 test(cli): cover --format json/sarif
+
+# 2026-02-21 — Patch release v0.0.22
+
+- Published **configsentry@0.0.22** to npm (latest tag).
+- Tagged + pushed **v0.0.22** on GitHub.
+
+Notes:
+- In local shells, prefer `--target ... --format json` (otherwise positional args can look like targets if placed after flags).
+
+Docs:
+- Updated README examples to prefer `--format` for JSON/SARIF output.
+
+Commits:
+- 968b2b1 chore(release): v0.0.22
+- d0a255c docs: prefer --format for json/sarif output
