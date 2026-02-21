@@ -162,3 +162,10 @@ Commit:
 
 Commit:
 - 30544c2 docs: bump README action snippets to v0.0.23
+
+# 2026-02-21 — Reduce CI email noise
+
+- Adjusted CI workflow trigger to run on **master pushes + PRs**, and **ignore v* tags** (releases have their own workflows).
+
+Commit:
+- dd2da4d ci: run on master/PRs, ignore v* tags (reduce email noise)
