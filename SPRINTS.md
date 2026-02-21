@@ -176,3 +176,10 @@ Commit:
 
 Commit:
 - 3f6cb46 docs: draft reddit post to request compose examples
+
+# 2026-02-21 — Docs consistency (v0.0.23)
+
+- Updated remaining docs snippets (baselines + example consumer workflow) to reference **v0.0.23**.
+
+Commit:
+- d808422 docs: bump baselines + example consumer workflow to v0.0.23
