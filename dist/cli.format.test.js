@@ -9,6 +9,7 @@ function runCli(args) {
         const stdout = execFileSync(process.execPath, [cliPath, ...args], {
             encoding: 'utf8',
             stdio: ['ignore', 'pipe', 'pipe'],
+            maxBuffer: 10 * 1024 * 1024,
         });
         return { stdout, exitCode: 0 };
     }
