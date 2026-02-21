@@ -29,13 +29,15 @@ function parseArgs(argv) {
     const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
     const writeBaselineIdx = args.indexOf('--write-baseline');
     const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
+    const outputIdx = args.indexOf('--output');
+    const outputPath = outputIdx >= 0 ? args[outputIdx + 1] : undefined;
     // Prefer explicit flag (matches the GitHub Action input)
     const targetIdx = args.indexOf('--target');
     const targetFromFlag = targetIdx >= 0 ? args[targetIdx + 1] : undefined;
     // Back-compat: first positional arg
     const targetFromPositional = args.find((a) => !a.startsWith('-'));
     const target = targetFromFlag ?? targetFromPositional;
-    return { args, help, version, output, format, baselinePath, writeBaselinePath, target };
+    return { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, target };
 }
 function usage() {
     console.log(`ConfigSentry (MVP)
@@ -48,6 +50,7 @@ Output:
   --json                    machine-readable findings (deprecated; use --format json)
   --sarif                   SARIF 2.1.0 (for GitHub code scanning) (deprecated; use --format sarif)
   --format <pretty|json|sarif>
+  --output <file>           write JSON/SARIF output to a file (use with --format)
 
 Baselines:
   --baseline <file>        suppress findings present in a baseline file
@@ -60,7 +63,7 @@ Exit codes:
 `);
 }
 async function main() {
-    const { args, help, version, output, format, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
+    const { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
     if (version) {
         try {
             const here = path.dirname(fileURLToPath(import.meta.url));
@@ -88,6 +91,10 @@ async function main() {
     }
     if (format && (args.includes('--json') || args.includes('--sarif'))) {
         console.error('Error: choose only one output mode: --json, --sarif, or --format');
+        process.exit(1);
+    }
+    if (outputPath && output === 'pretty') {
+        console.error('Error: --output requires machine output (use --format json or --format sarif)');
         process.exit(1);
     }
     if (!target) {
@@ -120,10 +127,22 @@ async function main() {
         process.exit(0);
     }
     if (output === 'json') {
-        console.log(JSON.stringify({ targetPaths, findings, suppressedCount: suppressed.length }, null, 2));
+        const payload = JSON.stringify({ targetPaths, findings, suppressedCount: suppressed.length }, null, 2);
+        if (outputPath) {
+            await fs.writeFile(path.resolve(outputPath), payload, 'utf8');
+        }
+        else {
+            console.log(payload);
+        }
     }
     else if (output === 'sarif') {
-        console.log(JSON.stringify(findingsToSarif(findings), null, 2));
+        const payload = JSON.stringify(findingsToSarif(findings), null, 2);
+        if (outputPath) {
+            await fs.writeFile(path.resolve(outputPath), payload, 'utf8');
+        }
+        else {
+            console.log(payload);
+        }
     }
     else {
         const scope = targetPaths.length === 1 ? targetPaths[0] : `${targetPaths.length} file(s)`;
