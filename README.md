@@ -69,13 +69,13 @@ node dist/cli.js --target ./docker-compose.yml
 ### JSON output (CI / tooling)
 
 ```bash
-node dist/cli.js --target ./docker-compose.yml --json
+node dist/cli.js --target ./docker-compose.yml --format json
 ```
 
 ### SARIF output (GitHub Code Scanning)
 
 ```bash
-node dist/cli.js --target ./docker-compose.yml --sarif > configsentry.sarif.json
+node dist/cli.js --target ./docker-compose.yml --format sarif > configsentry.sarif.json
 ```
 
 ## Baselines (incremental adoption)
@@ -91,6 +91,8 @@ Then suppress baseline findings in CI:
 ```bash
 node dist/cli.js --target ./docker-compose.yml --baseline .configsentry-baseline.json
 ```
+
+Tip: for machine output use `--format json` / `--format sarif`.
 
 ## Docs
 
