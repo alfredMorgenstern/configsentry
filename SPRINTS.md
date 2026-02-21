@@ -136,3 +136,15 @@ Docs:
 Commits:
 - 968b2b1 chore(release): v0.0.22
 - d0a255c docs: prefer --format for json/sarif output
+
+# 2026-02-21 — CI hotfix release v0.0.23
+
+Context: CI failures spammed email because `npm test` relied on shell globbing across OS.
+
+- Fixed `npm test` to be **Windows-safe** (explicit dist test file list via `scripts/run-tests.mjs`).
+- Published **configsentry@0.0.23** to npm + tagged/pushed **v0.0.23**.
+- CI is green across ubuntu/macos/windows again.
+
+Commits:
+- 35930bf ci(test): run node --test with explicit dist test files (windows-safe)
+- bcbc4e4 chore(release): v0.0.23
