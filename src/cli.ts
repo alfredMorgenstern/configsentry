@@ -19,7 +19,18 @@ function parseArgs(argv: string[]) {
 
   const json = args.includes('--json');
   const sarif = args.includes('--sarif');
-  const output: OutputMode = json ? 'json' : sarif ? 'sarif' : 'pretty';
+
+  const formatIdx = args.indexOf('--format');
+  const format = formatIdx >= 0 ? args[formatIdx + 1] : undefined;
+
+  let output: OutputMode = json ? 'json' : sarif ? 'sarif' : 'pretty';
+  if (format) {
+    if (format === 'pretty' || format === 'json' || format === 'sarif') {
+      output = format;
+    } else {
+      // Keep output as-is; main() will print a clear error.
+    }
+  }
 
   const baselineIdx = args.indexOf('--baseline');
   const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
@@ -35,19 +46,20 @@ function parseArgs(argv: string[]) {
 
   const target = targetFromFlag ?? targetFromPositional;
 
-  return { args, help, version, output, baselinePath, writeBaselinePath, target };
+  return { args, help, version, output, format, baselinePath, writeBaselinePath, target };
 }
 
 function usage() {
   console.log(`ConfigSentry (MVP)
 
 Usage:
-  configsentry <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]
-  configsentry --target <file-or-dir> [--json|--sarif] [--baseline <file>] [--write-baseline <file>]
+  configsentry <file-or-dir> [--json|--sarif|--format <pretty|json|sarif>] [--baseline <file>] [--write-baseline <file>]
+  configsentry --target <file-or-dir> [--json|--sarif|--format <pretty|json|sarif>] [--baseline <file>] [--write-baseline <file>]
 
 Output:
-  --json           machine-readable findings
-  --sarif          SARIF 2.1.0 (for GitHub code scanning)
+  --json                    machine-readable findings (deprecated; use --format json)
+  --sarif                   SARIF 2.1.0 (for GitHub code scanning) (deprecated; use --format sarif)
+  --format <pretty|json|sarif>
 
 Baselines:
   --baseline <file>        suppress findings present in a baseline file
@@ -61,7 +73,7 @@ Exit codes:
 }
 
 async function main() {
-  const { args, help, version, output, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
+  const { args, help, version, output, format, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
 
   if (version) {
     try {
@@ -81,14 +93,18 @@ async function main() {
     process.exit(0);
   }
 
-  if (output === 'json' && args.includes('--sarif')) {
-    // should be impossible due to parseArgs, but keep a clear message
-    console.error('Error: choose only one output mode: --json or --sarif');
+  if (format && format !== 'pretty' && format !== 'json' && format !== 'sarif') {
+    console.error(`Error: invalid --format '${format}'. Expected: pretty | json | sarif`);
     process.exit(1);
   }
 
-  if (output === 'sarif' && args.includes('--json')) {
-    console.error('Error: choose only one output mode: --json or --sarif');
+  if (args.includes('--json') && args.includes('--sarif')) {
+    console.error('Error: choose only one output mode: --json, --sarif, or --format');
+    process.exit(1);
+  }
+
+  if (format && (args.includes('--json') || args.includes('--sarif'))) {
+    console.error('Error: choose only one output mode: --json, --sarif, or --format');
     process.exit(1);
   }
 
