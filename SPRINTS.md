@@ -84,3 +84,12 @@ Next: ship as a patch release (e.g., v0.0.19 / now prepared as v0.0.20) so actio
 
 Commit:
 - f1da02b ci: test on ubuntu/macos/windows
+
+# 2026-02-21 — Patch release v0.0.21
+
+- Published **configsentry@0.0.21** to npm (latest tag).
+- Tagged + pushed **v0.0.21** on GitHub.
+
+Notes:
+- `npx` smoke test worked (run from outside the repo dir).
+- Minor gotcha: `git push --tags` tried to push historical tags too; prefer pushing the single tag (`git push origin v0.0.21`).
