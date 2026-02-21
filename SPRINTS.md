@@ -100,3 +100,10 @@ Notes:
 
 Commit:
 - 9b85138 docs: bump action examples to v0.0.21
+
+# 2026-02-21 — Post‑MVP: Compatibility matrix documented
+
+- Updated `docs/compatibility.md` and POST‑MVP plan to reflect that CI runs Node **18/20/22** on **ubuntu/macos/windows**.
+
+Commit:
+- ca439fd docs: document CI compatibility matrix
