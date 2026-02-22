@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.28
+- Rules: gentle warning for depends_on without healthcheck gating (`compose.depends-on-without-health`)
+
 ## v0.0.27
 - Rules: detect likely hardcoded secrets in `environment:` (HIGH/MEDIUM)
 - Rules: flag unpinned image tags (missing tag / :latest)
