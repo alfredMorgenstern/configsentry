@@ -234,3 +234,4 @@ Commits:
 Commits:
 - 318447b docs: bump snippets to v0.0.25 + baseline onboarding
 - 0ed93e5 docs: draft reddit ops touchpoint + mark baseline onboarding done
+- 3bd9097 docs: use --output in README + mark 60s quickstart done
