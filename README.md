@@ -102,6 +102,7 @@ Tip: for machine output use `--format json` / `--format sarif`.
 
 ## Docs
 
+- Proof in the wild (public repo tests): [`repo-tests/`](repo-tests/)
 - GitHub Action usage examples: [`docs/action-usage.md`](docs/action-usage.md)
 - Baselines (incremental adoption): [`docs/baselines.md`](docs/baselines.md)
 - Compatibility & scope: [`docs/compatibility.md`](docs/compatibility.md)
