@@ -173,6 +173,16 @@ jobs:
 - `2` findings present
 - `1` error
 
+## CI: fail only on high severity (optional)
+
+If you want ConfigSentry to block builds only on high severity findings:
+
+```bash
+npx configsentry ./docker-compose.yml --severity-threshold high
+```
+
+This also works in GitHub Actions via `args:` (see `docs/action-usage.md`).
+
 ## Example
 
 ```bash

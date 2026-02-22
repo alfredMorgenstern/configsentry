@@ -8,6 +8,9 @@ import { runRules } from './rules.js';
 import { findingsToSarif } from './sarif.js';
 import { resolveTargets } from './scan.js';
 import { applyBaseline, loadBaseline, writeBaseline } from './baseline.js';
+function severityRank(s) {
+    return s === 'low' ? 1 : s === 'medium' ? 2 : 3;
+}
 function parseArgs(argv) {
     const args = argv.slice(2);
     const help = args.includes('-h') || args.includes('--help');
@@ -29,6 +32,8 @@ function parseArgs(argv) {
     const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : undefined;
     const writeBaselineIdx = args.indexOf('--write-baseline');
     const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
+    const severityThresholdIdx = args.indexOf('--severity-threshold');
+    const severityThreshold = severityThresholdIdx >= 0 ? args[severityThresholdIdx + 1] : undefined;
     const outputIdx = args.indexOf('--output');
     const outputPath = outputIdx >= 0 ? args[outputIdx + 1] : undefined;
     // Prefer explicit flag (matches the GitHub Action input)
@@ -37,7 +42,7 @@ function parseArgs(argv) {
     // Back-compat: first positional arg
     const targetFromPositional = args.find((a) => !a.startsWith('-'));
     const target = targetFromFlag ?? targetFromPositional;
-    return { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, target };
+    return { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, severityThreshold, target };
 }
 function usage() {
     console.log(`ConfigSentry (MVP)
@@ -51,6 +56,8 @@ Output:
   --sarif                   SARIF 2.1.0 (for GitHub code scanning) (deprecated; use --format sarif)
   --format <pretty|json|sarif>
   --output <file>           write JSON/SARIF output to a file (use with --format)
+  --severity-threshold <low|medium|high>
+                            only report findings at/above this severity (affects exit code)
 
 Baselines:
   --baseline <file>        suppress findings present in a baseline file
@@ -63,7 +70,7 @@ Exit codes:
 `);
 }
 async function main() {
-    const { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
+    const { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, severityThreshold, target } = parseArgs(process.argv);
     if (version) {
         try {
             const here = path.dirname(fileURLToPath(import.meta.url));
@@ -97,6 +104,10 @@ async function main() {
         console.error('Error: --output requires machine output (use --format json or --format sarif)');
         process.exit(1);
     }
+    if (severityThreshold && severityThreshold !== 'low' && severityThreshold !== 'medium' && severityThreshold !== 'high') {
+        console.error(`Error: invalid --severity-threshold '${severityThreshold}'. Expected: low | medium | high`);
+        process.exit(1);
+    }
     if (!target) {
         usage();
         process.exit(1);
@@ -119,6 +130,14 @@ async function main() {
         const res = applyBaseline(allFindings, set);
         findings = res.kept;
         suppressed = res.suppressed;
+    }
+    // Severity threshold filtering (affects reporting + exit code)
+    if (severityThreshold) {
+        const min = severityRank(severityThreshold);
+        findings = findings.filter((f) => {
+            const sev = f.severity ?? 'low';
+            return severityRank(sev) >= min;
+        });
     }
     // Baseline generation mode
     if (writeBaselinePath) {

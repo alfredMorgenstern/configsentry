@@ -11,6 +11,12 @@ import { applyBaseline, loadBaseline, writeBaseline } from './baseline.js';
 
 type OutputMode = 'pretty' | 'json' | 'sarif';
 
+type SeverityThreshold = 'low' | 'medium' | 'high';
+
+function severityRank(s: SeverityThreshold) {
+  return s === 'low' ? 1 : s === 'medium' ? 2 : 3;
+}
+
 function parseArgs(argv: string[]) {
   const args = argv.slice(2);
 
@@ -37,6 +43,9 @@ function parseArgs(argv: string[]) {
   const writeBaselineIdx = args.indexOf('--write-baseline');
   const writeBaselinePath = writeBaselineIdx >= 0 ? args[writeBaselineIdx + 1] : undefined;
 
+  const severityThresholdIdx = args.indexOf('--severity-threshold');
+  const severityThreshold = severityThresholdIdx >= 0 ? (args[severityThresholdIdx + 1] as SeverityThreshold | undefined) : undefined;
+
   const outputIdx = args.indexOf('--output');
   const outputPath = outputIdx >= 0 ? args[outputIdx + 1] : undefined;
 
@@ -49,7 +58,7 @@ function parseArgs(argv: string[]) {
 
   const target = targetFromFlag ?? targetFromPositional;
 
-  return { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, target };
+  return { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, severityThreshold, target };
 }
 
 function usage() {
@@ -64,6 +73,8 @@ Output:
   --sarif                   SARIF 2.1.0 (for GitHub code scanning) (deprecated; use --format sarif)
   --format <pretty|json|sarif>
   --output <file>           write JSON/SARIF output to a file (use with --format)
+  --severity-threshold <low|medium|high>
+                            only report findings at/above this severity (affects exit code)
 
 Baselines:
   --baseline <file>        suppress findings present in a baseline file
@@ -77,7 +88,7 @@ Exit codes:
 }
 
 async function main() {
-  const { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, target } = parseArgs(process.argv);
+  const { args, help, version, output, format, outputPath, baselinePath, writeBaselinePath, severityThreshold, target } = parseArgs(process.argv);
 
   if (version) {
     try {
@@ -117,6 +128,11 @@ async function main() {
     process.exit(1);
   }
 
+  if (severityThreshold && severityThreshold !== 'low' && severityThreshold !== 'medium' && severityThreshold !== 'high') {
+    console.error(`Error: invalid --severity-threshold '${severityThreshold}'. Expected: low | medium | high`);
+    process.exit(1);
+  }
+
   if (!target) {
     usage();
     process.exit(1);
@@ -142,6 +158,15 @@ async function main() {
     const res = applyBaseline(allFindings, set);
     findings = res.kept;
     suppressed = res.suppressed;
+  }
+
+  // Severity threshold filtering (affects reporting + exit code)
+  if (severityThreshold) {
+    const min = severityRank(severityThreshold);
+    findings = findings.filter((f) => {
+      const sev = (f.severity as SeverityThreshold) ?? 'low';
+      return severityRank(sev) >= min;
+    });
   }
 
   // Baseline generation mode
