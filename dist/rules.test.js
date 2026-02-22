@@ -89,3 +89,23 @@ test('does not warn about read_only when set', () => {
     const findings = runRules(compose, 'docker-compose.yml');
     assert.ok(!findings.some((f) => f.id === 'compose.missing-read-only' && f.service === 'app'));
 });
+test('flags missing image tag', () => {
+    const compose = { services: { app: { image: 'nginx' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.image-floating-tag' && f.service === 'app'));
+});
+test('flags latest image tag', () => {
+    const compose = { services: { app: { image: 'nginx:latest' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.image-floating-tag' && f.service === 'app'));
+});
+test('does not flag pinned digest image', () => {
+    const compose = { services: { app: { image: 'nginx@sha256:deadbeef' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(!findings.some((f) => f.id === 'compose.image-floating-tag' && f.service === 'app'));
+});
+test('does not flag explicit version tag', () => {
+    const compose = { services: { app: { image: 'ghcr.io/acme/app:1.2.3' } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(!findings.some((f) => f.id === 'compose.image-floating-tag' && f.service === 'app'));
+});

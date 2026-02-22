@@ -274,6 +274,41 @@ export function runRules(compose, targetPath) {
                 suggestion: 'Consider setting read_only: true + add explicit writable mounts (e.g. tmpfs:/tmp or a data volume) if the app supports it.'
             });
         }
+        // Rule: floating / unpinned image tags
+        const image = svc?.image;
+        if (typeof image === 'string' && image.trim() !== '') {
+            // If pinned by digest, it's reproducible.
+            if (!image.includes('@')) {
+                const lastSlash = image.lastIndexOf('/');
+                const lastColon = image.lastIndexOf(':');
+                const hasTag = lastColon > lastSlash;
+                if (!hasTag) {
+                    findings.push({
+                        id: 'compose.image-floating-tag',
+                        title: 'Image tag not pinned',
+                        severity: 'medium',
+                        message: `Service '${serviceName}' uses an image without an explicit tag ('${image}').`,
+                        service: serviceName,
+                        path: `${targetPath}#services.${serviceName}.image`,
+                        suggestion: "Pin the image to a version tag (e.g. 'nginx:1.27') or a digest (e.g. 'nginx@sha256:...') for reproducible deployments."
+                    });
+                }
+                else {
+                    const tag = image.slice(lastColon + 1).trim();
+                    if (tag.toLowerCase() === 'latest') {
+                        findings.push({
+                            id: 'compose.image-floating-tag',
+                            title: 'Image tag not pinned',
+                            severity: 'medium',
+                            message: `Service '${serviceName}' uses a floating image tag ('${image}').`,
+                            service: serviceName,
+                            path: `${targetPath}#services.${serviceName}.image`,
+                            suggestion: "Pin the image to a version tag (e.g. 'nginx:1.27') or a digest (e.g. 'nginx@sha256:...') for reproducible deployments."
+                        });
+                    }
+                }
+            }
+        }
         // Rule: exposed sensitive ports
         const ports = normalizePorts(svc?.ports);
         for (const p of ports) {
