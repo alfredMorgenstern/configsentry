@@ -4,7 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ConfigSentry — docker-compose guardrails</title>
-  <meta name="description" content="ConfigSentry flags high-impact docker-compose.yml security and ops footguns: privileged containers, docker socket mounts, exposed ports, missing healthchecks, and more." />
+  <meta name="description" content="ConfigSentry flags high-impact docker-compose.yml security and ops footguns (root containers, exposed DB ports, docker.sock mounts, hardcoded secrets, missing healthchecks) locally or in CI." />
+
+  <!-- OpenGraph (nice previews when shared) -->
+  <meta property="og:title" content="ConfigSentry — docker-compose guardrails" />
+  <meta property="og:description" content="A tiny Compose linter: catch security + reliability footguns before they hit prod. Baselines + SARIF + CI-friendly exit codes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://configsentry.morgenstern.work/" />
+
+  <link rel="canonical" href="https://configsentry.morgenstern.work/" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -12,25 +20,29 @@
     <div class="top">
       <div class="brand">ConfigSentry</div>
       <nav class="nav">
-        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
-        <a href="#install">Install</a>
+        <a href="#quickstart">Quickstart</a>
+        <a href="#install">CI</a>
         <a href="#rules">Rules</a>
-        <a href="#roadmap">Roadmap</a>
+        <a href="#proof">Proof</a>
+        <a href="./blog/">Blog</a>
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
       </nav>
     </div>
 
     <h1>Guardrails for <code>docker-compose.yml</code>.</h1>
-    <p class="lead">A tiny CLI linter that catches security + reliability footguns before they hit prod.</p>
+    <p class="lead">A tiny CLI linter that catches security + reliability footguns before they hit prod — locally or in CI.</p>
 
     <div class="cta">
-      <a class="btn primary" href="https://github.com/alfredMorgenstern/configsentry">View on GitHub</a>
-      <a class="btn" href="#install">Run it in 60 seconds</a>
+      <a class="btn primary" href="#quickstart">Run locally (npx)</a>
+      <a class="btn" href="#install">Add GitHub Action</a>
+      <a class="btn" href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
     </div>
 
     <div class="badges">
       <span class="badge">CI-friendly exit codes</span>
       <span class="badge">Actionable fixes</span>
-      <span class="badge">MIT licensed</span>
+      <span class="badge">SARIF → GitHub Code Scanning</span>
+      <span class="badge">Baselines (incremental adoption)</span>
     </div>
   </header>
 
@@ -40,49 +52,72 @@
       <p>
         Compose files grow organically. A single line like <code>privileged: true</code> or mounting
         <code>/var/run/docker.sock</code> can silently turn a container into “root on host”. ConfigSentry
-        surfaces the riskiest patterns early — locally or in CI.
+        surfaces the riskiest patterns early.
       </p>
+    </section>
+
+    <section id="quickstart">
+      <h2>60-second quickstart</h2>
+
+      <p class="hint">Local scan:</p>
+      <pre><code>npx configsentry ./docker-compose.yml</code></pre>
+
+      <p class="hint">Adopt incrementally (existing repo): generate a baseline once, commit it, then block only on new findings.</p>
+      <pre><code># generate baseline (non-blocking)
+npx configsentry ./docker-compose.yml --write-baseline .configsentry-baseline.json
+
+# CI: suppress baseline findings
+npx configsentry ./docker-compose.yml --baseline .configsentry-baseline.json</code></pre>
+
+      <p class="hint">Optional: fail only on HIGH severity (CI gating):</p>
+      <pre><code>npx configsentry ./docker-compose.yml --severity-threshold high</code></pre>
+
+      <p class="hint">Details: <a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/baselines.md">baselines docs</a></p>
     </section>
 
     <section id="install">
-      <h2>Install & run</h2>
-      <pre><code>git clone https://github.com/alfredMorgenstern/configsentry
-cd configsentry
-npm ci
-npm run build
-node dist/cli.js --target ./docker-compose.yml</code></pre>
-      <p class="hint">Tip: use the exit code (<code>0</code>=clean, <code>2</code>=findings) to fail pipelines.</p>
+      <h2>GitHub Action + Code Scanning (SARIF)</h2>
+      <pre><code>permissions:
+  contents: read
+  security-events: write
+
+- uses: alfredMorgenstern/configsentry@v0.0.27
+  with:
+    target: .
+    sarif: true
+    upload-sarif: true
+    # baseline: .configsentry-baseline.json
+    # fail-on-findings: false</code></pre>
+      <p class="hint">More: <a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/action-usage.md">Action usage</a></p>
     </section>
 
     <section id="rules">
-      <h2>What it checks (MVP)</h2>
+      <h2>What it checks</h2>
       <ul class="grid">
-        <li><strong>Privileged containers</strong><br/>Flags <code>privileged: true</code>.</li>
-        <li><strong>Docker socket mounts</strong><br/>Flags mounting <code>/var/run/docker.sock</code>.</li>
-        <li><strong>Sensitive ports exposed</strong><br/>Flags <code>5432:5432</code> / public binds for common ports.</li>
-        <li><strong>Missing restart policy</strong><br/>Recommends <code>restart: unless-stopped</code> (or similar).</li>
-        <li><strong>Missing healthcheck</strong><br/>Encourages healthchecks for reliable orchestration.</li>
-        <li><strong>Likely running as root</strong><br/>Warns when <code>user:</code> is missing.</li>
+        <li><strong>Root containers</strong><br/>Flags when <code>user:</code> is missing.</li>
+        <li><strong>Hardcoded secrets</strong><br/>Flags likely secrets in <code>environment:</code> (heuristic).</li>
+        <li><strong>docker.sock mounts</strong><br/>Flags mounting <code>/var/run/docker.sock</code>.</li>
+        <li><strong>Exposed sensitive ports</strong><br/>Flags e.g. <code>5432:5432</code> on all interfaces.</li>
+        <li><strong>Unpinned images</strong><br/>Flags <code>image: nginx</code> / <code>:latest</code>.</li>
+        <li><strong>Healthchecks + restart</strong><br/>Encourages safer defaults for reliability.</li>
       </ul>
     </section>
 
-    <section id="roadmap">
-      <h2>Roadmap</h2>
-      <ol>
-        <li>Publish to npm (<code>configsentry</code>)</li>
-        <li>GitHub Action wrapper (fail PRs with annotated findings)</li>
-        <li>SARIF output for GitHub “Code scanning”</li>
-        <li>Baselines/suppressions for incremental adoption</li>
-        <li>Autofix mode for safe transforms</li>
-      </ol>
+    <section id="proof">
+      <h2>Proof in the wild</h2>
+      <p>
+        ConfigSentry is tested against public repositories (treated as untrusted, no repo code executed).
+        Reports are published here:
+      </p>
+      <p>
+        <a class="btn" href="https://github.com/alfredMorgenstern/configsentry/tree/master/repo-tests">Public repo tests →</a>
+      </p>
     </section>
 
     <section>
-      <h2>Pricing (later)</h2>
-      <p>
-        The core linter stays open source. If there’s demand, a Pro tier can add PR comments, SARIF,
-        baselines, and policy packs for common stacks.
-      </p>
+      <h2>Blog</h2>
+      <p>Short, practical notes: baselines, CI gating, and Compose security footguns.</p>
+      <p><a class="btn" href="./blog/">Read the blog →</a></p>
     </section>
 
     <footer class="footer">

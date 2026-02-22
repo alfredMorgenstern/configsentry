@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Baselines: adopt ConfigSentry without breaking CI</title>
+  <meta name="description" content="How to adopt ConfigSentry in an existing repo using baselines: generate once, commit it, then fail only on new findings." />
+  <link rel="canonical" href="https://configsentry.morgenstern.work/blog/baseline-rollout-without-breaking-ci.html" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div class="brand"><a href="../" style="color:inherit;text-decoration:none">ConfigSentry</a></div>
+      <nav class="nav">
+        <a href="./">Blog</a>
+        <a href="../#quickstart">Quickstart</a>
+        <a href="../#install">CI</a>
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+      </nav>
+    </div>
+
+    <h1>Baselines: adopt ConfigSentry without breaking CI</h1>
+    <p class="lead">The goal: get signal on day 1, but only block builds on <em>new</em> findings.</p>
+    <p class="hint">2026-02-22</p>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Step 1 — Generate a baseline (non-blocking)</h2>
+      <pre><code>npx configsentry ./docker-compose.yml --write-baseline .configsentry-baseline.json</code></pre>
+      <p class="hint">Commit <code>.configsentry-baseline.json</code> to the repo (so changes are reviewed like code).</p>
+    </section>
+
+    <section>
+      <h2>Step 2 — Use the baseline in CI</h2>
+      <pre><code>npx configsentry ./docker-compose.yml --baseline .configsentry-baseline.json</code></pre>
+      <p>This suppresses findings that match the baseline, but still reports new findings.</p>
+    </section>
+
+    <section>
+      <h2>Step 3 — Enforce “no new findings”</h2>
+      <p>When you’re ready to prevent regressions:</p>
+      <ul>
+        <li>keep the baseline</li>
+        <li>set your CI to fail on findings (new ones)</li>
+      </ul>
+      <p class="hint">If you use the GitHub Action, this maps to <code>baseline:</code> + <code>fail-on-findings: true</code>.</p>
+    </section>
+
+    <section>
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/baselines.md">Baselines docs</a></li>
+        <li><a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/baseline-walkthrough.md">Baseline walkthrough (end-to-end)</a></li>
+        <li><a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/action-usage.md">GitHub Action usage</a></li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <p><a href="./">← Back to blog</a></p>
+    </footer>
+  </main>
+</body>
+</html>
