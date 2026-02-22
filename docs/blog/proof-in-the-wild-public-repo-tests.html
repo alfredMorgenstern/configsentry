@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Proof in the wild: ConfigSentry vs public compose files</title>
+  <meta name="description" content="What ConfigSentry finds in real public docker-compose.yml files: root containers, missing healthchecks, docker.sock mounts, hardcoded secrets, and more." />
+  <link rel="canonical" href="https://configsentry.morgenstern.work/blog/proof-in-the-wild-public-repo-tests.html" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div class="brand"><a href="../" style="color:inherit;text-decoration:none">ConfigSentry</a></div>
+      <nav class="nav">
+        <a href="./">Blog</a>
+        <a href="../#quickstart">Quickstart</a>
+        <a href="../#install">CI</a>
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+      </nav>
+    </div>
+
+    <h1>Proof in the wild: ConfigSentry vs public compose files</h1>
+    <p class="lead">A quick reality check: what shows up in real repositories.</p>
+    <p class="hint">2026-02-22</p>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Safety / methodology</h2>
+      <ul>
+        <li>Repos are treated as <strong>untrusted</strong>.</li>
+        <li>No repo code is executed (no installs, no scripts).</li>
+        <li>Only Compose YAML files are scanned.</li>
+        <li>Clones are deleted after scanning.</li>
+      </ul>
+      <p class="hint">Full reports (with aggregate summaries): <a href="https://github.com/alfredMorgenstern/configsentry/tree/master/repo-tests">repo-tests/</a></p>
+    </section>
+
+    <section>
+      <h2>What we found</h2>
+      <p>Across the first three repos tested, the most common patterns were:</p>
+      <ul>
+        <li><strong>Running as root</strong> (missing <code>user:</code>)</li>
+        <li><strong>Missing healthchecks</strong> and restart policies</li>
+        <li><strong>Unpinned images</strong> (<code>:latest</code> / missing tag)</li>
+        <li>Occasional <strong>docker.sock mounts</strong> (especially in CI / agent setups)</li>
+        <li>Hardcoded <strong>secrets in environment</strong> (often in demo stacks)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Try it yourself</h2>
+      <pre><code>npx configsentry ./docker-compose.yml</code></pre>
+      <p class="hint">For CI gating: <code>--severity-threshold high</code></p>
+    </section>
+
+    <footer class="footer">
+      <p><a href="./">← Back to blog</a></p>
+    </footer>
+  </main>
+</body>
+</html>

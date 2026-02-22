@@ -66,7 +66,8 @@ Suggested next rules (ranked):
 - [ ] `tmpfs:` suggestion for sensitive paths (optional)
 - [ ] `privileged` alternatives guidance (`cap_add` minimal set)
 - [ ] host path mounts of `/` or `/etc` or `/proc`/`/sys` patterns (severity HIGH)
-- [ ] environment variables containing secrets (heuristic; careful to avoid false positives)
+- [x] environment variables containing secrets (heuristic; careful to avoid false positives)
+- [x] image tags should be pinned (avoid `latest` / missing tags) — reproducibility
 - [ ] `depends_on` without healthcheck condition (Compose v2 nuance) — warn gently
 
 Deliverable: more value per run; keep false positives low.
