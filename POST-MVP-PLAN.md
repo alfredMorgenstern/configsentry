@@ -78,7 +78,7 @@ Deliverable: more value per run; keep false positives low.
 - [ ] Add `--format` option (human/json/sarif) to simplify flags
 - [ ] Add `--quiet` and `--no-color`
 - [ ] Add `--output <file>` for SARIF/JSON without shell redirection
-- [ ] Add `--severity-threshold` (e.g., fail only on HIGH)
+- [x] Add `--severity-threshold` (e.g., fail only on HIGH)
 
 Deliverable: easier CI integration in diverse environments.
 

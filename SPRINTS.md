@@ -239,3 +239,12 @@ Commits:
 - b38ce28 docs(demo): note npx fails inside repo; use node dist/cli.js
 - d70baf7 dx: add npm run demo scripts for contributors
 - f6b96e7 docs: add baseline walkthrough + mark baseline UX done
+
+# 2026-02-22 — Patch release v0.0.26 (severity threshold)
+
+- Added `--severity-threshold <low|medium|high>` to filter reported findings (and exit code) for CI gating.
+- Published **configsentry@0.0.26** to npm + tagged/pushed **v0.0.26**.
+
+Commits:
+- 6501c2a dx(cli): add --severity-threshold to filter findings
+- 1a018d3 chore(release): v0.0.26
