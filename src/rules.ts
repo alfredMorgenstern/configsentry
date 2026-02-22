@@ -2,6 +2,46 @@ import type { Finding } from './types.js';
 
 const SENSITIVE_PORTS = new Set([5432, 3306, 6379, 27017, 9200]);
 
+const SECRET_KEY_RE = /(pass(word)?|secret|token|api[_-]?key|private[_-]?key)/i;
+const PLACEHOLDER_VALUE_RE = /^(changeme|change-me|password|secret|token|example|example_password|yourpassword|your_password|replace_me|replace-me|TODO)$/i;
+
+function extractEnv(svc: any): Array<{ key: string; value: string; raw: string }> {
+  const env = svc?.environment;
+  const res: Array<{ key: string; value: string; raw: string }> = [];
+
+  // environment:
+  //   KEY: value
+  // or
+  // environment:
+  //   - KEY=value
+  //   - KEY
+  if (env && typeof env === 'object' && !Array.isArray(env)) {
+    for (const [k, v] of Object.entries(env)) {
+      if (typeof k !== 'string') continue;
+      if (v == null) continue;
+      res.push({ key: k, value: String(v), raw: `${k}=${String(v)}` });
+    }
+    return res;
+  }
+
+  if (Array.isArray(env)) {
+    for (const item of env) {
+      if (typeof item !== 'string') continue;
+      const idx = item.indexOf('=');
+      if (idx === -1) {
+        // KEY (value from environment at runtime) — not a hardcoded secret
+        continue;
+      }
+      const key = item.slice(0, idx);
+      const value = item.slice(idx + 1);
+      if (!key) continue;
+      res.push({ key, value, raw: item });
+    }
+  }
+
+  return res;
+}
+
 function normalizePorts(ports: any): Array<{ hostIp?: string; hostPort?: number; containerPort?: number; raw: string }> {
   if (!Array.isArray(ports)) return [];
   const res: Array<{ hostIp?: string; hostPort?: number; containerPort?: number; raw: string }> = [];
@@ -268,6 +308,26 @@ export function runRules(compose: any, targetPath: string): Finding[] {
         service: serviceName,
         path: `${targetPath}#services.${serviceName}.user`,
         suggestion: 'Set user: "1000:1000" (or a dedicated UID/GID) and ensure the image supports running unprivileged.'
+      });
+    }
+
+    // Rule: hardcoded secrets in environment
+    for (const { key, value, raw } of extractEnv(svc)) {
+      if (!SECRET_KEY_RE.test(key)) continue;
+      const v = String(value).trim();
+      if (v.length === 0) continue;
+      // ${VAR} / ${VAR:-default} / ${VAR?err}
+      if (v.startsWith('${') && v.endsWith('}')) continue;
+
+      const placeholder = PLACEHOLDER_VALUE_RE.test(v) || v.toLowerCase().includes('changeme');
+      findings.push({
+        id: 'compose.hardcoded-secret',
+        title: 'Possible hardcoded secret in compose environment',
+        severity: placeholder ? 'medium' : 'high',
+        message: `Service '${serviceName}' sets '${key}' to a literal value in environment ('${raw}').`,
+        service: serviceName,
+        path: `${targetPath}#services.${serviceName}.environment`,
+        suggestion: 'Avoid committing secrets in docker-compose.yml. Prefer ${VAR} with a .env file (gitignored) or Docker secrets where supported.'
       });
     }
 

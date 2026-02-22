@@ -109,3 +109,18 @@ test('does not flag explicit version tag', () => {
     const findings = runRules(compose, 'docker-compose.yml');
     assert.ok(!findings.some((f) => f.id === 'compose.image-floating-tag' && f.service === 'app'));
 });
+test('flags hardcoded secret in environment (object syntax)', () => {
+    const compose = { services: { app: { environment: { POSTGRES_PASSWORD: 'supersecret' } } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.hardcoded-secret' && f.service === 'app' && f.severity === 'high'));
+});
+test('does not flag env var reference ${VAR}', () => {
+    const compose = { services: { app: { environment: { POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}' } } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(!findings.some((f) => f.id === 'compose.hardcoded-secret' && f.service === 'app'));
+});
+test('flags placeholder secret as medium', () => {
+    const compose = { services: { app: { environment: ['API_KEY=changeme'] } } };
+    const findings = runRules(compose, 'docker-compose.yml');
+    assert.ok(findings.some((f) => f.id === 'compose.hardcoded-secret' && f.service === 'app' && f.severity === 'medium'));
+});
