@@ -248,3 +248,16 @@ Commits:
 Commits:
 - 6501c2a dx(cli): add --severity-threshold to filter findings
 - 1a018d3 chore(release): v0.0.26
+
+
+# 2026-02-22 — Marketing/SEO: publish proof + start blog
+
+- Published public repo test reports under `repo-tests/` and linked them from README + landing page.
+- Improved landing page (quickstart + baselines + severity threshold + action snippet) + added `/blog/`.
+- Added blog post: “Proof in the wild: ConfigSentry vs public compose files”.
+- Added `sitemap.xml` + robots.txt sitemap reference.
+
+Commits:
+- 43058d9 docs: add public repo test reports (proof in the wild)
+- 386b7fd docs(site): improve landing, add blog + sitemap
+- d58a860 docs(site): add proof-in-the-wild blog post + update sitemap
