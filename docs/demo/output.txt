@@ -2,7 +2,7 @@
 
 Generated via:
 
-- From this repo: `node dist/cli.js --target ./docs/demo/docker-compose.demo.yml`
+- From this repo: `npm run demo` (or `node dist/cli.js --target ./docs/demo/docker-compose.demo.yml`)
 - From any other folder: `npx configsentry@0.0.25 ./docs/demo/docker-compose.demo.yml`
 
 Expected:

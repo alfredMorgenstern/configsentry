@@ -31,7 +31,9 @@
     "prepack": "npm run build",
     "start": "node dist/cli.js",
     "dev": "node --loader ts-node/esm src/cli.ts",
-    "lint:example": "node dist/cli.js ./example.docker-compose.yml"
+    "lint:example": "node dist/cli.js ./example.docker-compose.yml",
+    "demo": "node dist/cli.js --target ./docs/demo/docker-compose.demo.yml",
+    "demo:json": "node dist/cli.js --target ./docs/demo/docker-compose.demo.yml --format json --output /tmp/configsentry-demo.json"
   },
   "keywords": [
     "docker",
