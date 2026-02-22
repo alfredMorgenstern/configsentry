@@ -2,7 +2,7 @@
 
 Generated via:
 
-- `npx configsentry@0.0.23 --target ./docs/demo/docker-compose.demo.yml`
+- `npx configsentry@0.0.25 ./docs/demo/docker-compose.demo.yml`
 
 Expected:
 - exits with code 2 (findings)
@@ -10,12 +10,37 @@ Expected:
 
 Example output (trimmed):
 
-- [HIGH] Privileged container (compose.privileged)
-- [HIGH] Docker socket mounted (compose.docker-socket)
-- [HIGH] Sensitive port exposed publicly (compose.exposed-sensitive-port)
-- [HIGH] Dangerous Linux capabilities (compose.cap-add-all)
-- [HIGH] Host network namespace (compose.network-host)
-- [MEDIUM] Missing restart policy (compose.missing-restart)
-- [MEDIUM] Missing healthcheck (compose.missing-healthcheck)
+```
+❌ 14 finding(s) for ./docs/demo/docker-compose.demo.yml
 
-(For full output, run the command above.)
+[MEDIUM] Missing restart policy
+- service: db
+- rule: compose.missing-restart
+- msg: Service 'db' has no restart policy.
+- fix: Set restart: unless-stopped (or on-failure) to improve resilience.
+
+[HIGH] Sensitive port exposed publicly
+- service: db
+- rule: compose.exposed-sensitive-port
+- msg: Service 'db' exposes a commonly sensitive port (5432) on all interfaces (ports: '5432:5432').
+- fix: Bind to 127.0.0.1 (e.g. '127.0.0.1:5432:5432') or remove the port and use an internal network.
+
+[HIGH] Privileged container
+- service: runner
+- rule: compose.privileged
+- msg: Service 'runner' runs with privileged: true.
+- fix: Remove privileged: true unless absolutely required; prefer adding only the needed capabilities.
+
+[HIGH] Docker socket mounted
+- service: runner
+- rule: compose.docker-socket
+- msg: Service 'runner' mounts /var/run/docker.sock which effectively grants root-on-host.
+- fix: Avoid mounting the docker socket. If you need it, isolate the runner and treat it as privileged infrastructure.
+
+… (more)
+```
+
+Tip: If you want machine output, you can do:
+
+- JSON: `npx configsentry@0.0.25 ./docs/demo/docker-compose.demo.yml --format json --output configsentry.json`
+- SARIF: `npx configsentry@0.0.25 ./docs/demo/docker-compose.demo.yml --format sarif --output configsentry.sarif.json`
