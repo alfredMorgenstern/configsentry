@@ -23,7 +23,7 @@ This plan is ordered by **ROI** (adoption + trust + feedback loops) and avoids b
 
 ### 1.2 Baseline/suppressions UX
 - [ ] Document baseline workflow end-to-end with a real example repo
-- [ ] Add a “common onboarding” doc section:
+- [x] Add a “common onboarding” doc section:
   - start with `fail-on-findings: false`
   - generate baseline
   - flip to `fail-on-findings: true`
