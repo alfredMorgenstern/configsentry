@@ -237,3 +237,4 @@ Commits:
 - 3bd9097 docs: use --output in README + mark 60s quickstart done
 - 584655b docs(demo): refresh output example for v0.0.25
 - b38ce28 docs(demo): note npx fails inside repo; use node dist/cli.js
+- d70baf7 dx: add npm run demo scripts for contributors
