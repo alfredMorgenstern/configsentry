@@ -87,6 +87,11 @@ Goal: get signal immediately, without breaking CI on day 1.
 - keep `baseline:` (to avoid old issues breaking builds)
 - set `fail-on-findings: true` (to block on *new* findings)
 
+## Walkthrough
+
+If you want a concrete, end-to-end rollout recipe, see:
+- [`docs/baseline-walkthrough.md`](baseline-walkthrough.md)
+
 ## Tips
 
 - Keep the baseline file **in the repo** so it’s reviewed like code.

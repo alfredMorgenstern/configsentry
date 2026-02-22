@@ -22,7 +22,7 @@ This plan is ordered by **ROI** (adoption + trust + feedback loops) and avoids b
 - [x] Confirm Windows/macOS path behavior (basic run) — especially file globs + path separators
 
 ### 1.2 Baseline/suppressions UX
-- [ ] Document baseline workflow end-to-end with a real example repo
+- [x] Document baseline workflow end-to-end with a real example repo
 - [x] Add a “common onboarding” doc section:
   - start with `fail-on-findings: false`
   - generate baseline
