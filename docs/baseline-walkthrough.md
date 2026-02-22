@@ -22,7 +22,7 @@ permissions:
 Create a workflow (or temporarily add a step) that generates a baseline file.
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     write-baseline: .configsentry-baseline.json
@@ -43,7 +43,7 @@ git commit -m "chore: add ConfigSentry baseline"
 Now switch the workflow to use the baseline:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     baseline: .configsentry-baseline.json
@@ -64,7 +64,7 @@ When you’re ready to prevent regressions:
 - set `fail-on-findings: true`
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     baseline: .configsentry-baseline.json

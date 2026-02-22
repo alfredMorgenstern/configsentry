@@ -38,7 +38,7 @@ npx configsentry ./docker-compose.yml --baseline .configsentry-baseline.json
 Run this on a branch and commit the generated file:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     write-baseline: .configsentry-baseline.json
@@ -48,7 +48,7 @@ Run this on a branch and commit the generated file:
 ### Use baseline in CI
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     baseline: .configsentry-baseline.json
@@ -64,7 +64,7 @@ Goal: get signal immediately, without breaking CI on day 1.
 1) **Start in non-blocking mode**, generate a baseline, and commit it:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     write-baseline: .configsentry-baseline.json
@@ -74,7 +74,7 @@ Goal: get signal immediately, without breaking CI on day 1.
 2) **Enable ongoing scanning** using the baseline (still non-blocking at first):
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     baseline: .configsentry-baseline.json

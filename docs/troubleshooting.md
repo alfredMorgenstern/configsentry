@@ -15,7 +15,7 @@ This is intentional so you can distinguish **policy findings** from **tool failu
 In GitHub Actions:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
     sarif: true
@@ -55,7 +55,7 @@ npx configsentry .
 Action:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.25
+- uses: alfredMorgenstern/configsentry@v0.0.28
   with:
     target: .
 ```
@@ -65,7 +65,7 @@ Action:
 Recommended:
 
 ```bash
-npm i -g configsentry@0.0.25
+npm i -g configsentry@0.0.28
 configsentry ./docker-compose.yml
 ```
 
