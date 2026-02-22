@@ -261,3 +261,10 @@ Commits:
 - 43058d9 docs: add public repo test reports (proof in the wild)
 - 386b7fd docs(site): improve landing, add blog + sitemap
 - d58a860 docs(site): add proof-in-the-wild blog post + update sitemap
+
+# 2026-02-22 — Marketing: X/Twitter post drafts
+
+- Drafted 4 short X/Twitter posts (proof-in-the-wild, 60s quickstart+CI gating, SARIF Code Scanning, 1-liner value prop).
+
+Commit:
+- (see git log)
