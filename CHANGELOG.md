@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.26
+- CLI: add `--severity-threshold <low|medium|high>` to report/fail only at/above a severity
+- DX: add `npm run demo` / `npm run demo:json` for running the demo file from the repo
+- Docs: baseline onboarding walkthrough + refreshed demo output examples
+
 ## v0.0.20
 - Rules: suggest hardening via `read_only: true` (LOW severity)
 
