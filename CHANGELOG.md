@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.27
+- Rules: detect likely hardcoded secrets in `environment:` (HIGH/MEDIUM)
+- Rules: flag unpinned image tags (missing tag / :latest)
+
 ## v0.0.26
 - CLI: add `--severity-threshold <low|medium|high>` to report/fail only at/above a severity
 - DX: add `npm run demo` / `npm run demo:json` for running the demo file from the repo
