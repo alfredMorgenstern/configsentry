@@ -225,3 +225,12 @@ Commit:
 Commits:
 - 6c3ccec dx(cli): add --output <file> for json/sarif
 - e044137 chore(release): v0.0.25
+
+# 2026-02-22 — Adoption ops: baseline onboarding + Reddit touchpoint draft
+
+- Added a dedicated **baseline onboarding** section to docs (non-blocking → baseline → flip to blocking on new findings).
+- Drafted a short Reddit “ops touchpoint” post for **v0.0.25** focusing on baselines + CI-friendly `--output`.
+
+Commits:
+- 318447b docs: bump snippets to v0.0.25 + baseline onboarding
+- 0ed93e5 docs: draft reddit ops touchpoint + mark baseline onboarding done
