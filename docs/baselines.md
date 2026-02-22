@@ -38,7 +38,7 @@ npx configsentry ./docker-compose.yml --baseline .configsentry-baseline.json
 Run this on a branch and commit the generated file:
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.24
+- uses: alfredMorgenstern/configsentry@v0.0.25
   with:
     target: .
     write-baseline: .configsentry-baseline.json
@@ -48,7 +48,7 @@ Run this on a branch and commit the generated file:
 ### Use baseline in CI
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.24
+- uses: alfredMorgenstern/configsentry@v0.0.25
   with:
     target: .
     baseline: .configsentry-baseline.json
@@ -56,6 +56,36 @@ Run this on a branch and commit the generated file:
     upload-sarif: true
     fail-on-findings: false
 ```
+
+## Recommended onboarding (existing repo)
+
+Goal: get signal immediately, without breaking CI on day 1.
+
+1) **Start in non-blocking mode**, generate a baseline, and commit it:
+
+```yml
+- uses: alfredMorgenstern/configsentry@v0.0.25
+  with:
+    target: .
+    write-baseline: .configsentry-baseline.json
+    fail-on-findings: false
+```
+
+2) **Enable ongoing scanning** using the baseline (still non-blocking at first):
+
+```yml
+- uses: alfredMorgenstern/configsentry@v0.0.25
+  with:
+    target: .
+    baseline: .configsentry-baseline.json
+    sarif: true
+    upload-sarif: true
+    fail-on-findings: false
+```
+
+3) After you’ve fixed some issues (or you’re ready to enforce it), flip to **blocking** mode:
+- keep `baseline:` (to avoid old issues breaking builds)
+- set `fail-on-findings: true` (to block on *new* findings)
 
 ## Tips
 

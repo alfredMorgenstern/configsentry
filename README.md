@@ -15,7 +15,7 @@ npx configsentry ./docker-compose.yml
 ### GitHub Action (minimal)
 
 ```yml
-- uses: alfredMorgenstern/configsentry@v0.0.24
+- uses: alfredMorgenstern/configsentry@v0.0.25
   with:
     target: .
 ```
@@ -27,7 +27,7 @@ permissions:
   contents: read
   security-events: write
 
-- uses: alfredMorgenstern/configsentry@v0.0.24
+- uses: alfredMorgenstern/configsentry@v0.0.25
   with:
     target: .
     sarif: true
@@ -146,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: alfredMorgenstern/configsentry@v0.0.24
+      - uses: alfredMorgenstern/configsentry@v0.0.25
         with:
           target: .
           # optional: baseline: .configsentry-baseline.json
