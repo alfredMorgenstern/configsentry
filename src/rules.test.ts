@@ -98,6 +98,28 @@ test('suggests read_only hardening', () => {
   assert.ok(findings.some((f) => f.id === 'compose.missing-read-only' && f.service === 'app'));
 });
 
+test('warns about depends_on without healthcheck gating', () => {
+  const compose = {
+    services: {
+      web: { depends_on: ['db'] },
+      db: { image: 'postgres:16' },
+    },
+  };
+  const findings = runRules(compose, 'docker-compose.yml');
+  assert.ok(findings.some((f) => f.id === 'compose.depends-on-without-health' && f.service === 'web'));
+});
+
+test('does not warn depends_on when service_healthy is used and deps have healthchecks', () => {
+  const compose = {
+    services: {
+      web: { depends_on: { db: { condition: 'service_healthy' } } },
+      db: { image: 'postgres:16', healthcheck: { test: ['CMD', 'true'] } },
+    },
+  };
+  const findings = runRules(compose, 'docker-compose.yml');
+  assert.ok(!findings.some((f) => f.id === 'compose.depends-on-without-health' && f.service === 'web'));
+});
+
 test('does not warn about read_only when set', () => {
   const compose = { services: { app: { read_only: true } } };
   const findings = runRules(compose, 'docker-compose.yml');

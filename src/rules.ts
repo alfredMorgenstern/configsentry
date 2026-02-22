@@ -271,6 +271,43 @@ export function runRules(compose: any, targetPath: string): Finding[] {
       }
     }
 
+    // Rule: depends_on without healthchecks / service_healthy
+    // Compose nuance: service_healthy requires healthchecks and is not universally used.
+    // We keep this as a gentle reliability warning.
+    const dependsOn = svc?.depends_on;
+    if (dependsOn != null) {
+      // Collect dependency service names.
+      const deps: string[] = [];
+      if (Array.isArray(dependsOn)) {
+        for (const d of dependsOn) if (typeof d === 'string') deps.push(d);
+      } else if (dependsOn && typeof dependsOn === 'object') {
+        for (const k of Object.keys(dependsOn)) deps.push(k);
+      }
+
+      // Detect whether any condition: service_healthy is used.
+      let hasServiceHealthy = false;
+      if (dependsOn && typeof dependsOn === 'object' && !Array.isArray(dependsOn)) {
+        for (const v of Object.values(dependsOn)) {
+          if (v && typeof v === 'object' && String((v as any).condition ?? '').toLowerCase() === 'service_healthy') {
+            hasServiceHealthy = true;
+          }
+        }
+      }
+
+      const depsMissingHealthchecks = deps.filter((d) => services?.[d]?.healthcheck == null);
+      if (depsMissingHealthchecks.length > 0 || !hasServiceHealthy) {
+        findings.push({
+          id: 'compose.depends-on-without-health',
+          title: 'depends_on without healthcheck gating',
+          severity: 'low',
+          message: `Service '${serviceName}' uses depends_on without robust healthcheck gating.`,
+          service: serviceName,
+          path: `${targetPath}#services.${serviceName}.depends_on`,
+          suggestion: "Prefer adding healthchecks and (where supported) depends_on: { <svc>: { condition: service_healthy } } to avoid startup race conditions."
+        });
+      }
+    }
+
     // Rule: restart policy
     if (svc?.restart == null) {
       findings.push({
