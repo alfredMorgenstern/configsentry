@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.0.29
+- Rules: improve depends_on warning message (includes dependency list)
+
 ## v0.0.28
 - Rules: gentle warning for depends_on without healthcheck gating (`compose.depends-on-without-health`)
 

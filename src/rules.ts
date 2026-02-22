@@ -300,7 +300,7 @@ export function runRules(compose: any, targetPath: string): Finding[] {
           id: 'compose.depends-on-without-health',
           title: 'depends_on without healthcheck gating',
           severity: 'low',
-          message: `Service '${serviceName}' uses depends_on without robust healthcheck gating.`,
+          message: `Service '${serviceName}' uses depends_on without robust healthcheck gating (deps: ${deps.join(', ') || '-'}).`,
           service: serviceName,
           path: `${targetPath}#services.${serviceName}.depends_on`,
           suggestion: "Prefer adding healthchecks and (where supported) depends_on: { <svc>: { condition: service_healthy } } to avoid startup race conditions."
