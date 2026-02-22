@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GitHub Code Scanning (SARIF) for docker-compose.yml</title>
+  <meta name="description" content="How to upload SARIF to GitHub Code Scanning for docker-compose.yml checks using ConfigSentry (GitHub Action + security-events permissions)." />
+  <link rel="canonical" href="https://configsentry.morgenstern.work/github-code-scanning-compose-sarif.html" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div class="brand"><a href="./" style="color:inherit;text-decoration:none">ConfigSentry</a></div>
+      <nav class="nav">
+        <a href="./#install">Landing</a>
+        <a href="./compose-linter.html">Compose linter</a>
+        <a href="./blog/">Blog</a>
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+      </nav>
+    </div>
+
+    <h1>GitHub Code Scanning (SARIF) for <code>docker-compose.yml</code></h1>
+    <p class="lead">Show Compose misconfigurations in GitHub’s Security → Code scanning UI (SARIF upload).</p>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Minimal workflow</h2>
+      <pre><code>name: Compose scan
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  configsentry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: alfredMorgenstern/configsentry@v0.0.27
+        with:
+          target: .
+          sarif: true
+          upload-sarif: true
+          fail-on-findings: false</code></pre>
+      <p class="hint">More docs: <a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/action-usage.md">action-usage.md</a></p>
+    </section>
+
+    <section>
+      <h2>Common pitfalls</h2>
+      <ul>
+        <li>Missing <code>permissions: security-events: write</code> → SARIF upload fails.</li>
+        <li>Use baselines for incremental rollout in existing repos.</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <p><a href="./">← Back to landing page</a></p>
+    </footer>
+  </main>
+</body>
+</html>

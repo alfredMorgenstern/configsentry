@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Docker Compose security best practices (practical checklist)</title>
+  <meta name="description" content="A practical checklist for Docker Compose security: run as non-root, avoid docker.sock, pin images, restrict ports, avoid privileged, add no-new-privileges, and use healthchecks." />
+  <link rel="canonical" href="https://configsentry.morgenstern.work/compose-security-best-practices.html" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div class="brand"><a href="./" style="color:inherit;text-decoration:none">ConfigSentry</a></div>
+      <nav class="nav">
+        <a href="./#quickstart">Quickstart</a>
+        <a href="./compose-linter.html">Compose linter</a>
+        <a href="./blog/">Blog</a>
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+      </nav>
+    </div>
+
+    <h1>Docker Compose security best practices</h1>
+    <p class="lead">A short, opinionated checklist of the footguns that actually show up in the wild.</p>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Checklist</h2>
+      <ol>
+        <li><strong>Run as non-root</strong>: set <code>user: "1000:1000"</code> when possible.</li>
+        <li><strong>Avoid docker.sock</strong>: mounting it gives host-level control (treat as privileged infrastructure).</li>
+        <li><strong>Don’t expose sensitive ports</strong>: bind DB ports to <code>127.0.0.1</code> or internal networks.</li>
+        <li><strong>Pin images</strong>: avoid <code>latest</code> / missing tags; prefer version tags or digests.</li>
+        <li><strong>Avoid privileged / ALL caps</strong>: minimize privileges and capabilities.</li>
+        <li><strong>Add healthchecks + restart</strong>: prevents silent failures and flapping services.</li>
+        <li><strong>Keep secrets out of YAML</strong>: use <code>${VAR}</code> + <code>.env</code> (gitignored) or Docker secrets.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Automate the checklist</h2>
+      <p class="hint">Run ConfigSentry locally:</p>
+      <pre><code>npx configsentry ./docker-compose.yml</code></pre>
+
+      <p class="hint">CI gating (only HIGH):</p>
+      <pre><code>npx configsentry ./docker-compose.yml --severity-threshold high</code></pre>
+
+      <p class="hint">More: <a href="./compose-linter.html">Docker Compose linter</a></p>
+    </section>
+
+    <footer class="footer">
+      <p><a href="./">← Back to landing page</a></p>
+    </footer>
+  </main>
+</body>
+</html>

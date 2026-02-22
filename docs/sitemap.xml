@@ -12,4 +12,13 @@
   <url>
     <loc>https://configsentry.morgenstern.work/blog/proof-in-the-wild-public-repo-tests.html</loc>
   </url>
+  <url>
+    <loc>https://configsentry.morgenstern.work/compose-linter.html</loc>
+  </url>
+  <url>
+    <loc>https://configsentry.morgenstern.work/compose-security-best-practices.html</loc>
+  </url>
+  <url>
+    <loc>https://configsentry.morgenstern.work/github-code-scanning-compose-sarif.html</loc>
+  </url>
 </urlset>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Docker Compose linter (configsentry) — security + ops guardrails</title>
+  <meta name="description" content="ConfigSentry is a Docker Compose linter that catches security + reliability footguns (root containers, docker.sock mounts, exposed DB ports, missing healthchecks, unpinned images)." />
+  <link rel="canonical" href="https://configsentry.morgenstern.work/compose-linter.html" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div class="brand"><a href="./" style="color:inherit;text-decoration:none">ConfigSentry</a></div>
+      <nav class="nav">
+        <a href="./#quickstart">Quickstart</a>
+        <a href="./#install">CI</a>
+        <a href="./blog/">Blog</a>
+        <a href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+      </nav>
+    </div>
+
+    <h1>Docker Compose linter</h1>
+    <p class="lead">Lint <code>docker-compose.yml</code> for security + ops footguns — fast, CI-friendly, actionable fixes.</p>
+
+    <div class="cta">
+      <a class="btn primary" href="#quickstart">Run locally</a>
+      <a class="btn" href="#ci">Use in CI</a>
+      <a class="btn" href="https://github.com/alfredMorgenstern/configsentry">GitHub</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="quickstart">
+      <h2>Quickstart</h2>
+      <pre><code>npx configsentry ./docker-compose.yml</code></pre>
+      <p class="hint">Exit codes: 0 = clean, 2 = findings, 1 = error.</p>
+    </section>
+
+    <section>
+      <h2>What it catches</h2>
+      <ul class="grid">
+        <li><strong>Runs as root</strong><br/>Missing <code>user:</code> (often combined with bind mounts).</li>
+        <li><strong>docker.sock mounts</strong><br/>Mounting <code>/var/run/docker.sock</code> ≈ root-on-host.</li>
+        <li><strong>Exposed DB ports</strong><br/>Sensitive ports bound to <code>0.0.0.0</code> (e.g. <code>5432:5432</code>).</li>
+        <li><strong>Hardcoded secrets</strong><br/>Likely secrets in <code>environment:</code> (heuristic).</li>
+        <li><strong>Unpinned images</strong><br/>Missing tags or <code>:latest</code> break reproducibility.</li>
+        <li><strong>Missing healthchecks</strong><br/>Reliability guardrails (<code>healthcheck</code>, <code>restart</code>).</li>
+      </ul>
+    </section>
+
+    <section id="ci">
+      <h2>CI usage</h2>
+      <p class="hint">Fail only on high severity findings:</p>
+      <pre><code>npx configsentry ./docker-compose.yml --severity-threshold high</code></pre>
+
+      <p class="hint">Incremental rollout (baselines):</p>
+      <pre><code>npx configsentry ./docker-compose.yml --write-baseline .configsentry-baseline.json
+npx configsentry ./docker-compose.yml --baseline .configsentry-baseline.json</code></pre>
+
+      <p class="hint">More docs: <a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/baselines.md">Baselines</a> · <a href="https://github.com/alfredMorgenstern/configsentry/blob/master/docs/action-usage.md">GitHub Action</a></p>
+    </section>
+
+    <section>
+      <h2>Proof in the wild</h2>
+      <p>Public repo scans (untrusted repos, no code executed):</p>
+      <p><a class="btn" href="https://github.com/alfredMorgenstern/configsentry/tree/master/repo-tests">repo-tests/ →</a></p>
+    </section>
+
+    <footer class="footer">
+      <p><a href="./">← Back to landing page</a></p>
+    </footer>
+  </main>
+</body>
+</html>
