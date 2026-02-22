@@ -39,7 +39,7 @@ Deliverable: fewer surprises, easier adoption, fewer “why did this fail?” mo
 ## 2) Distribution & adoption (highest ROI) (1–2 evenings)
 
 ### 2.1 A “60-second install” landing section
-- [ ] Update README top to include:
+- [x] Update README top to include:
   - `npx configsentry ./docker-compose.yml`
   - minimal Action snippet
   - Code Scanning snippet

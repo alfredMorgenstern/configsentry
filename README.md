@@ -72,10 +72,16 @@ node dist/cli.js --target ./docker-compose.yml
 node dist/cli.js --target ./docker-compose.yml --format json
 ```
 
+Write JSON to a file (no shell redirection needed):
+
+```bash
+node dist/cli.js --target ./docker-compose.yml --format json --output configsentry.json
+```
+
 ### SARIF output (GitHub Code Scanning)
 
 ```bash
-node dist/cli.js --target ./docker-compose.yml --format sarif > configsentry.sarif.json
+node dist/cli.js --target ./docker-compose.yml --format sarif --output configsentry.sarif.json
 ```
 
 ## Baselines (incremental adoption)
@@ -160,7 +166,7 @@ jobs:
 
 **Note (consumer repos):** your repo does **not** need a `package-lock.json`. The action installs/builds ConfigSentry from the action package itself.
 
-> Tip: pin to a tag (like `v0.0.18`) for reproducible builds.
+> Tip: pin to a tag (like `v0.0.25`) for reproducible builds.
 
 ## Exit codes
 - `0` no findings
